@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as TableActions from '../actions/TableActions';
 import Table from '../components/Table';
 import Footer from '../components/Footer';
+import DevTools from './DevTools';
 
 /**
  * It is common practice to have a 'Root' container/component require our main App (this one).
@@ -16,17 +17,17 @@ export default class App extends Component {
     const { users, actions } = this.props;
     return (
       <div className="main-app-container">
-        <div className="main-app-nav">Simple Redux Boilerplate</div>
+        <div className="main-app-nav">Redux+Router Boilerplate</div>
         {/* notice that we then pass those unpacked props into the Counter component */}
         <Table users={users} actions={actions} />
-        <Footer />
+        <DevTools />
       </div>
     );
   }
 }
 
 App.propTypes = {
-  users: PropTypes.number.isRequired,
+  users: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired
 };
 

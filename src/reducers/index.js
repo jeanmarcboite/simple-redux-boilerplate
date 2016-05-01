@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import {routerReducer} from 'react-router-redux';
 import users from './users';
 
 /**
@@ -15,7 +16,8 @@ import users from './users';
  * More info: http://rackt.org/redux/docs/api/combineReducers.html
  */
 const rootReducer = combineReducers({
-  users, // you might be used to: counter: counter,
+  users: users, 
+  routing: routerReducer
 });
 
 export default rootReducer;
