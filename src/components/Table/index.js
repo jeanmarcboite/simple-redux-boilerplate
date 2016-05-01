@@ -6,6 +6,7 @@ import {ButtonGroup, Glyphicon, Button, Table as BTable,
 
 export default class Table extends Component {
   render() {
+    console.log('render Table');
     return (
       <div className="table-container">
         <BootstrapTable data={this.props.users}>

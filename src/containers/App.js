@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as TableActions from '../actions/TableActions';
+import * as TableActions from '../components/Table/actions';
 import Table from '../components/Table';
 import Footer from '../components/Footer';
 import DevTools from './DevTools';
+import {Link} from 'react-router';
 
 /**
  * It is common practice to have a 'Root' container/component require our main App (this one).
@@ -20,6 +21,9 @@ export default class App extends Component {
         <div className="main-app-nav">Redux+Router Boilerplate</div>
         {/* notice that we then pass those unpacked props into the Counter component */}
         <Table users={users} actions={actions} />
+        {this.props.children}
+        <Link to={'/SuitBreak'}>SuitBreak</Link>
+        <Link to={'/about'}>About</Link>
         <DevTools />
       </div>
     );
