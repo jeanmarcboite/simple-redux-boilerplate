@@ -5,26 +5,14 @@ import {ButtonGroup, Glyphicon, Button, Table as BTable,
 } from 'react-bootstrap'
 
 export default class Table extends Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
-  handleIncrement() {
-    this.props.actions.increment();
-  }
-
-  handleDecrement() {
-    this.props.actions.decrement();
-  }
-
   render() {
     return (
       <div className="table-container">
         <BootstrapTable data={this.props.users}>
         <TableHeaderColumn dataField='id' isKey={true}>
           <ButtonGroup>
-            <Button bsStyle="primary" bsSize="large" active onClick={() => {this.handleDecrement();}}><Glyphicon glyph="glyphicon glyphicon-minus"/></Button>
-            <Button bsStyle="primary" bsSize="large" active onClick={() => {this.handleIncrement();}}><Glyphicon glyph="glyphicon glyphicon-plus"/></Button>
+            <Button bsStyle="primary" bsSize="large" active onClick={() => {this.props.actions.decrement();}}><Glyphicon glyph="glyphicon glyphicon-minus"/></Button>
+            <Button bsStyle="primary" bsSize="large" active onClick={() => {this.props.actions.increment();}}><Glyphicon glyph="glyphicon glyphicon-plus"/></Button>
           </ButtonGroup>
         </TableHeaderColumn>
         <TableHeaderColumn dataField="name">
@@ -33,7 +21,7 @@ export default class Table extends Component {
           </FormGroup>
           </TableHeaderColumn>
           <TableHeaderColumn dataField="email">Email</TableHeaderColumn>
-          <TableHeaderColumn dataField="birthday">Bithday</TableHeaderColumn>
+          <TableHeaderColumn dataField="birthday">Birthday</TableHeaderColumn>
       </BootstrapTable>
         <br />
       </div>
