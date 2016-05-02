@@ -53,13 +53,13 @@ class App extends React.Component {
     </Navbar.Brand>
   </Navbar.Header>
   <Nav>
-    <LinkContainer to='/SuitBreak'><NavItem role='presentation'>SuitBreak</NavItem></LinkContainer>
-   <LinkContainer to='/about'><NavItem  role='presentation'>About</NavItem></LinkContainer>
+    <LinkContainer to='/SuitBreak'><NavItem>SuitBreak</NavItem></LinkContainer>
+   <LinkContainer to='/about'><NavItem >About</NavItem></LinkContainer>
     <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-    <LinkContainer to={'/'}><NavItem  role='presentation'><Glyphicon glyph="home"/> Home</NavItem></LinkContainer>
-    <LinkContainer to={'/Table'}><NavItem  role='presentation'><Glyphicon glyph="stats"/> Table</NavItem></LinkContainer>
+    <LinkContainer to='/'><NavItem><Glyphicon glyph="home"/> Home</NavItem></LinkContainer>
+    <LinkContainer to='/Table'><NavItem><Glyphicon glyph="stats"/> Table</NavItem></LinkContainer>
       <MenuItem divider />
-        <LinkContainer to={'/about'}><NavItem  role='presentation'><Glyphicon  glyph="blackboard"/>  About</NavItem></LinkContainer>
+        <LinkContainer to='/about'><NavItem><Glyphicon  glyph="blackboard"/> About</NavItem></LinkContainer>
     </NavDropdown>
   </Nav>
 </Navbar>
