@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as TableActions from '../components/Table/actions';
@@ -6,26 +6,72 @@ import Table from '../components/Table';
 import Footer from '../components/Footer';
 import DevTools from './DevTools';
 import {Link} from 'react-router';
-
+import {Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem, Glyphicon} from 'react-bootstrap';
+import Menu from 'react-motion-menu'
+import SideNav from 'react-sidenav'
 /**
  * It is common practice to have a 'Root' container/component require our main App (this one).
  * Again, this is because it serves to wrap the rest of our application with the Provider
  * component to make the Redux store available to the rest of the app.
  */
-export default class App extends Component {
+class App extends React.Component {
+  state = {menu: {isOpen: false}}
+  handleOnOpen = () => {
+    this.setState({menu: {isOpen: true}})
+  }
+  handleOnClose = () => {
+    this.setState({menu: {isOpen: false}})
+  }
   render() {
+      const navbarInstance = (
+    <Navbar>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <a href="#">React-Bootstrap</a>
+        </Navbar.Brand>
+      </Navbar.Header>
+      <Nav>
+        <NavItem ><Link to={'/'}>Home</Link></NavItem>
+        <NavItem ><Link to={'/SuitBreak'}>SuitBreak</Link></NavItem>
+       <NavItem ><Link to={'/about'}>About</Link></NavItem>
+        <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+        <NavItem ><Link to={'/'}>Home</Link></NavItem>
+        <NavItem ><Link to={'/SuitBreak'}><Glyphicon glyph="stats"/>  SuitBreak</Link></NavItem>
+          <MenuItem divider />
+            <NavItem ><Link to={'/about'}><Glyphicon  glyph="align-left"/>  About</Link></NavItem>
+        </NavDropdown>
+      </Nav>
+    </Navbar>
+  );
+  const motionMenuInstance = (<Menu
+     direction="vertical"
+     distance={80}
+     width={50}
+     height={50}
+     y={0}
+     x={-10}
+     customStyle={{
+       color: "#fff",
+       textAlign:"center",
+       lineHeight:"50px",
+       backgroundColor: "#16A085",
+       border: "solid 1px #16A085",
+       borderRadius: "50%"
+     }}>
+     <div><i className={this.state.menu.isOpen ? "fa fa-times" : "fa fa-bars"}></i></div>
+       <Link to={'/'}><Glyphicon glyph="home"/></Link>
+         <Link to={'/SuitBreak'}><Glyphicon glyph="stats"/></Link>
+       <Link to={'/about'}><Glyphicon  glyph="align-left"/></Link>
+   </Menu>);
+
     // we can use ES6's object destructuring to effectively 'unpack' our props
     const { users, actions } = this.props;
     return (
-      <div className="main-app-container">
-        <div className="main-app-nav">Redux+Router Boilerplate</div>
-        {/* notice that we then pass those unpacked props into the Counter component */}
-        <Table users={users} actions={actions} />
+      <div>
+        {navbarInstance}
         {this.props.children}
-        <Link to={'/SuitBreak'}>SuitBreak</Link>
-        <Link to={'/about'}>About</Link>
         <DevTools />
-      </div>
+        </div>
     );
   }
 }
