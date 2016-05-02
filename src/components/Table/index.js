@@ -1,10 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {ButtonGroup, Glyphicon, Button, Table as BTable,
   FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap'
+import * as actions from './actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-export default class Table extends Component {
+class Table extends React.Component {
   render() {
     console.log('render Table');
     return (
@@ -30,7 +33,18 @@ export default class Table extends Component {
   }
 }
 
-Table.propTypes = {
-  users: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
-};
+function mapStateToProps(state) {
+  return {
+    users: state.users
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Table);

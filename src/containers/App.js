@@ -27,16 +27,15 @@ class App extends React.Component {
     <Navbar>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="#">React-Bootstrap</a>
+          <Link to='/'>React-Bootstrap</Link>
         </Navbar.Brand>
       </Navbar.Header>
       <Nav>
-        <NavItem ><Link to={'/'}>Home</Link></NavItem>
-        <NavItem ><Link to={'/SuitBreak'}>SuitBreak</Link></NavItem>
-       <NavItem ><Link to={'/about'}>About</Link></NavItem>
+        <NavItem ><Link to='/SuitBreak'>SuitBreak</Link></NavItem>
+       <NavItem ><Link to='/about'>About</Link></NavItem>
         <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
         <NavItem ><Link to={'/'}>Home</Link></NavItem>
-        <NavItem ><Link to={'/SuitBreak'}><Glyphicon glyph="stats"/>  SuitBreak</Link></NavItem>
+        <NavItem ><Link to={'/Table'}><Glyphicon glyph="stats"/> Table</Link></NavItem>
           <MenuItem divider />
             <NavItem ><Link to={'/about'}><Glyphicon  glyph="align-left"/>  About</Link></NavItem>
         </NavDropdown>
