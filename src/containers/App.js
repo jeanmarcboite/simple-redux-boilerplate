@@ -23,27 +23,8 @@ class App extends React.Component {
   handleOnClose = () => {
     this.setState({menu: {isOpen: false}})
   }
-  render() {
-      const navbarInstance = (
-    <Navbar>
-      <Navbar.Header>
-        <Navbar.Brand>
-          <Link to='/'>React-Bootstrap</Link>
-        </Navbar.Brand>
-      </Navbar.Header>
-      <Nav>
-        <LinkContainer to='/SuitBreak'><NavItem role='presentation'>SuitBreak</NavItem></LinkContainer>
-       <LinkContainer to='/about'><NavItem  role='presentation'>About</NavItem></LinkContainer>
-        <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-        <LinkContainer to={'/'}><NavItem  role='presentation'><Glyphicon glyph="home"/> Home</NavItem></LinkContainer>
-        <LinkContainer to={'/Table'}><NavItem  role='presentation'><Glyphicon glyph="stats"/> Table</NavItem></LinkContainer>
-          <MenuItem divider />
-            <LinkContainer to={'/about'}><NavItem  role='presentation'><Glyphicon  glyph="blackboard"/>  About</NavItem></LinkContainer>
-        </NavDropdown>
-      </Nav>
-    </Navbar>
-  );
-  const motionMenuInstance = (<Menu
+
+  motionMenuInstance = (<Menu
      direction="vertical"
      distance={80}
      width={50}
@@ -62,18 +43,49 @@ class App extends React.Component {
        <Link to={'/'}><Glyphicon glyph="home"/></Link>
          <Link to={'/SuitBreak'}><Glyphicon glyph="stats"/></Link>
        <Link to={'/about'}><Glyphicon  glyph="align-left"/></Link>
-   </Menu>);
+   </Menu>)
+
+  navbarInstance = (
+<Navbar>
+  <Navbar.Header>
+    <Navbar.Brand>
+      <Link to='/'>React-Bootstrap</Link>
+    </Navbar.Brand>
+  </Navbar.Header>
+  <Nav>
+    <LinkContainer to='/SuitBreak'><NavItem role='presentation'>SuitBreak</NavItem></LinkContainer>
+   <LinkContainer to='/about'><NavItem  role='presentation'>About</NavItem></LinkContainer>
+    <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+    <LinkContainer to={'/'}><NavItem  role='presentation'><Glyphicon glyph="home"/> Home</NavItem></LinkContainer>
+    <LinkContainer to={'/Table'}><NavItem  role='presentation'><Glyphicon glyph="stats"/> Table</NavItem></LinkContainer>
+      <MenuItem divider />
+        <LinkContainer to={'/about'}><NavItem  role='presentation'><Glyphicon  glyph="blackboard"/>  About</NavItem></LinkContainer>
+    </NavDropdown>
+  </Nav>
+</Navbar>
+)
+
+  render() {
 
     // we can use ES6's object destructuring to effectively 'unpack' our props
     const { users, actions } = this.props;
+
+    if (process.env.NODE_ENV === 'production') {
+      return (<div>
+        {this.navbarInstance}
+        {this.props.children}
+        </div>);
+    } else {
     return (
       <div>
-        {navbarInstance}
+        {this.navbarInstance}
         {this.props.children}
         <DevTools />
         </div>
     );
   }
+
+}
 }
 
 App.propTypes = {
