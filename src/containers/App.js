@@ -6,6 +6,7 @@ import Table from '../components/Table';
 import Footer from '../components/Footer';
 import DevTools from './DevTools';
 import {Link} from 'react-router';
+import {LinkContainer} from 'react-router-bootstrap';
 import {Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem, Glyphicon} from 'react-bootstrap';
 import Menu from 'react-motion-menu'
 import SideNav from 'react-sidenav'
@@ -31,13 +32,13 @@ class App extends React.Component {
         </Navbar.Brand>
       </Navbar.Header>
       <Nav>
-        <NavItem ><Link to='/SuitBreak'>SuitBreak</Link></NavItem>
-       <NavItem ><Link to='/about'>About</Link></NavItem>
+        <LinkContainer to='/SuitBreak'><NavItem role='presentation'>SuitBreak</NavItem></LinkContainer>
+       <LinkContainer to='/about'><NavItem  role='presentation'>About</NavItem></LinkContainer>
         <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-        <NavItem ><Link to={'/'}>Home</Link></NavItem>
-        <NavItem ><Link to={'/Table'}><Glyphicon glyph="stats"/> Table</Link></NavItem>
+        <LinkContainer to={'/'}><NavItem  role='presentation'><Glyphicon glyph="home"/> Home</NavItem></LinkContainer>
+        <LinkContainer to={'/Table'}><NavItem  role='presentation'><Glyphicon glyph="stats"/> Table</NavItem></LinkContainer>
           <MenuItem divider />
-            <NavItem ><Link to={'/about'}><Glyphicon  glyph="align-left"/>  About</Link></NavItem>
+            <LinkContainer to={'/about'}><NavItem  role='presentation'><Glyphicon  glyph="blackboard"/>  About</NavItem></LinkContainer>
         </NavDropdown>
       </Nav>
     </Navbar>
