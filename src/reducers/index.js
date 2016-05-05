@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {routerReducer} from 'react-router-redux';
 import users from './users';
+import suitBreakReducer from '../components/SuitBreak/reducers'
 
 /**
  * combineReducers is important to understand. As your app might grow in size
@@ -16,7 +17,8 @@ import users from './users';
  * More info: http://rackt.org/redux/docs/api/combineReducers.html
  */
 const rootReducer = combineReducers({
-  users: users, 
+  suitbreak: suitBreakReducer,
+  users: users,
   routing: routerReducer
 });
 

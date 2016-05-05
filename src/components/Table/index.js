@@ -6,6 +6,7 @@ import {ButtonGroup, Glyphicon, Button, Table as BTable,
 import * as actions from './actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import JsonInspector from 'react-json-inspector';
 
 class Table extends React.Component {
   render() {
@@ -28,6 +29,7 @@ class Table extends React.Component {
           <TableHeaderColumn dataField="birthday">Birthday</TableHeaderColumn>
       </BootstrapTable>
         <br />
+        <JsonInspector data={this.props} />
       </div>
     );
   }
