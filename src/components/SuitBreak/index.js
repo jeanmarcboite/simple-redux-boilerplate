@@ -9,13 +9,16 @@ import math from 'mathjs';
 class SuitBreak extends React.Component {
   state = {
     precision: 1, //this.props.state.get('precision'),
-  missing: 4,
-    leftVacant: 12,
+    missing: 4,
+    leftVacant: 0,
     rightVacant: 13
   }
+  setParam = (param, value) => {
+    this.setState({[param]: value})
+    this.props.actions.setParam([param], value);
+  }
   handlePrecision = (event) => {
-    this.setState({precision: event.target.value})
-    this.props.actions.setParam('precision', event.target.value);
+    this.setParam('precision', event.target.value)
   }
   handleMissing = (event) => {
     this.setState({missing: event.target.value})
@@ -23,11 +26,11 @@ class SuitBreak extends React.Component {
   }
   handleLeftVacant = (event) => {
     this.setState({leftVacant: event.target.value})
-    this.props.actions.setVacantPlaces('left', event.target.value);
+    this.props.actions.setParam('leftVacant', event.target.value);
   }
   handleRightVacant = (event) => {
     this.setState({rightVacant: event.target.value})
-    this.props.actions.setVacantPlaces('right', event.target.value);
+    this.props.actions.setParam('rightVacant', event.target.value);
   }
 
 leftRange = () => {
@@ -43,7 +46,7 @@ let totalCombinations = math.combinations(vacant, this.state.leftVacant);
       let vacantCombinations = math.combinations(vacantPlaces, math.subtract(this.state.leftVacant, left));
       let combinations = math.multiply(leftCombinations, vacantCombinations);
 
-      data.push([left, right, math.round(math.divide(combinations, totalCombinations), this.state.precision), combinations]);
+      data.push([left, right, math.round(math.divide(math.multiply(combinations, 100), totalCombinations), this.state.precision), combinations]);
     }
   }
   return data;
@@ -53,6 +56,7 @@ let totalCombinations = math.combinations(vacant, this.state.leftVacant);
     var centerStyle = {
       textAlign: 'center'
 }
+var k = 0;
 
     return (<div>
       <h1>SuitBreak</h1>
@@ -78,9 +82,7 @@ let totalCombinations = math.combinations(vacant, this.state.leftVacant);
             </tr>
           </thead>
           <tbody id="table-body">
-            {this.leftRange().map(function(item) {
-              return(<tr key={item[0]}><td>{item[0]}</td><td>{item[1]}</td><td>{item[2]}</td><td>{item[3]}</td></tr>)
-            })}
+            {this.leftRange().map(item => (<tr key={item[0]}>{item.map(el => (<td key={k++}>{el}</td>))}</tr>))}
           </tbody>
     </Table>
   </div>
