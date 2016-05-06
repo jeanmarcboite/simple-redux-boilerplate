@@ -10,83 +10,69 @@ class SuitBreak extends React.Component {
   state = {
     precision: 1, //this.props.state.get('precision'),
     missing: 4,
-    leftVacant: 0,
+    leftVacant: 4,
     rightVacant: 13
   }
-  setParam = (param, value) => {
-    this.setState({[param]: value})
-    this.props.actions.setParam([param], value);
-  }
-  handlePrecision = (event) => {
-    this.setParam('precision', event.target.value)
-  }
-  handleMissing = (event) => {
-    this.setState({missing: event.target.value})
-    this.props.actions.setParam('missing', event.target.value);
-  }
-  handleLeftVacant = (event) => {
-    this.setState({leftVacant: event.target.value})
-    this.props.actions.setParam('leftVacant', event.target.value);
-  }
-  handleRightVacant = (event) => {
-    this.setState({rightVacant: event.target.value})
-    this.props.actions.setParam('rightVacant', event.target.value);
+
+  setParameter = (param, event) => {
+    console.log(`param: ${param}`)
+    this.setState({[param]: event.target.value})
+    this.props.actions.setParam([param], event.target.value);
   }
 
-leftRange = () => {
-  var data = [];
-let vacant = math.add(this.state.leftVacant, this.state.rightVacant);
-let vacantPlaces = math.subtract(vacant, this.state.missing);
-let totalCombinations = math.combinations(vacant, this.state.leftVacant);
-  for (var left = 0; left <= this.state.missing; left++) {
-    let right = math.subtract(this.state.missing, left);
+  leftRange = () => {
+    var data = [];
+    let vacant = math.add(this.state.leftVacant, this.state.rightVacant);
+    let vacantPlaces = math.subtract(vacant, this.state.missing);
+    let totalCombinations = math.combinations(vacant, this.state.leftVacant);
+    for (var left = 0; left <= this.state.missing; left++) {
+      let right = math.subtract(this.state.missing, left);
 
-    if ((left <= this.state.leftVacant) && (right <= this.state.rightVacant)) {
-      let leftCombinations = math.combinations(this.state.missing, left);
-      let vacantCombinations = math.combinations(vacantPlaces, math.subtract(this.state.leftVacant, left));
-      let combinations = math.multiply(leftCombinations, vacantCombinations);
+      if ((left <= this.state.leftVacant) && (right <= this.state.rightVacant)) {
+        let leftCombinations = math.combinations(this.state.missing, left);
+        let vacantCombinations = math.combinations(vacantPlaces, math.subtract(this.state.leftVacant, left));
+        let combinations = math.multiply(leftCombinations, vacantCombinations);
 
-      data.push([left, right, math.round(math.divide(math.multiply(combinations, 100), totalCombinations), this.state.precision), combinations]);
+        data.push([left, right, math.round(math.divide(math.multiply(combinations, 100), totalCombinations), this.state.precision), combinations]);
+      }
     }
+    return data;
   }
-  return data;
-}
 
   render() {
     var centerStyle = {
       textAlign: 'center'
-}
-var k = 0;
+    }
+    var k = 0;
+    var setParam = _.curry(this.setParameter)
 
-    return (<div>
-      <h1>SuitBreak</h1>
-<input type="number" min="0" max="3" width="3" value={this.state.precision} onChange={this.handlePrecision}/>
-    <h1>Table</h1>
+    return (
       <div class="container">
-    <Table striped bordered condensed hover>
-  <caption><h2>Break probabilities for <input type="number" min="0" max="13" size="2" value={this.state.missing} onChange={this.handleMissing}/> missing cards</h2></caption>
-    <thead>
-      <tr>
-        <th colSpan="2" style={centerStyle}>Vacant Places</th>
-        <th colSpan="2" style={centerStyle} >Precision <input type="number"
-          min="0" max="3"
-          value={this.state.precision} onChange={this.handlePrecision} size="3"/> digits</th>
-        </tr>
-        <tr>
-          <th width="20%" style={centerStyle}> Left <input type="number"
-            min="0" max="13" value={this.state.leftVacant} onChange={this.handleLeftVacant}/></th>
-          <th width="20%" style={centerStyle}> Right <input type="number"
-              min="0" max="13" value={this.state.rightVacant} onChange={this.handleRightVacant}/></th>
-            <th width="30%" style={centerStyle}>Prob (%) </th>
+        <Table striped bordered condensed hover>
+          <caption><h2>Suit Break probabilities for
+            <input type="number" min="0" max="13" size="2" value={this.state.missing} onChange={setParam('missing')}/>
+            missing cards</h2></caption>
+          <thead>
+            <tr>
+              <th colSpan="2" style={centerStyle}>Vacant Places</th>
+              <th colSpan="2" style={centerStyle} >Precision <input type="number"
+                min="0" max="3"
+                value={this.state.precision} onChange={setParam('precision')} size="3"/> digits</th>
+            </tr>
+            <tr>
+              <th width="20%" style={centerStyle}> Left <input type="number"
+                min="0" max="13" value={this.state.leftVacant} onChange={setParam('leftVacant')}/></th>
+              <th width="20%" style={centerStyle}> Right <input type="number"
+                min="0" max="13" value={this.state.rightVacant} onChange={setParam('rightVacant')}/></th>
+              <th width="30%" style={centerStyle}>Prob (%) </th>
               <th width="30%" style={centerStyle}>&#x2211;(%)</th>
             </tr>
           </thead>
           <tbody id="table-body">
             {this.leftRange().map(item => (<tr key={item[0]}>{item.map(el => (<td key={k++}>{el}</td>))}</tr>))}
           </tbody>
-    </Table>
-  </div>
-</div>);
+        </Table>
+    </div>);
   }
 }
 
