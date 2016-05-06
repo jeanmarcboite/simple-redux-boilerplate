@@ -15,12 +15,11 @@ class SuitBreak extends React.Component {
   }
 
   setParameter = (param, event) => {
-    console.log(`param: ${param}`)
     this.setState({[param]: event.target.value})
     this.props.actions.setParam([param], event.target.value);
   }
 
-  leftRange = () => {
+  tableRow = () => {
     var data = [];
     let vacant = math.add(this.state.leftVacant, this.state.rightVacant);
     let vacantPlaces = math.subtract(vacant, this.state.missing);
@@ -50,7 +49,7 @@ class SuitBreak extends React.Component {
       <div class="container">
         <Table striped bordered condensed hover>
           <caption><h2>Suit Break probabilities for
-            <input type="number" min="0" max="13" size="2" value={this.state.missing} onChange={setParam('missing')}/>
+            <input type="number" min="0" max="13" value={this.state.missing} onChange={setParam('missing')}/>
             missing cards</h2></caption>
           <thead>
             <tr>
@@ -69,7 +68,7 @@ class SuitBreak extends React.Component {
             </tr>
           </thead>
           <tbody id="table-body">
-            {this.leftRange().map(item => (<tr key={item[0]}>{item.map(el => (<td key={k++}>{el}</td>))}</tr>))}
+            {this.tableRow().map(item => (<tr key={item[0]}>{item.map(el => (<td key={k++}>{el}</td>))}</tr>))}
           </tbody>
         </Table>
     </div>);

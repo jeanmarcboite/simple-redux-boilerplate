@@ -10,7 +10,7 @@ import DevTools from '../containers/DevTools';
  * conjunction with your standard DevTools monitor gives you great
  * flexibility!
  */
-const logger = createLogger();
+const logger = createLogger({level: 'info', collapsed: true});
 
 const finalCreateStore = compose(
   // Middleware you want to use in development:

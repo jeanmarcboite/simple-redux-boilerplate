@@ -16,7 +16,7 @@ const randomUser = () => {
 
 
 export default function usersReducer(state = [], action) {
-    console.log('userReducer was called with state', state, 'and action', action)
+    // console.log('userReducer was called with state', state, 'and action', action)
 
     switch (action.type) {
       case 'ADD_RANDOM_USER':
