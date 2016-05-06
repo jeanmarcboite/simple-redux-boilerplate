@@ -8,14 +8,15 @@ import math from 'mathjs';
 
 class SuitBreak extends React.Component {
   state = {
-    precision: 1, //this.props.state.get('precision'),
-    missing: 4,
-    leftVacant: 4,
-    rightVacant: 13
+    precision: this.props.state.get('precision'),
+    missing: this.props.state.get('missing'),
+    leftVacant: this.props.state.get('leftVacant'),
+    rightVacant: this.props.state.get('rightVacant')
   }
 
   setParameter = (param, event) => {
-    this.setState({[param]: event.target.value})
+    console.log(`setParameter ${param} to ${event.target.value}`);
+    this.setState({[param]: event.target.value});
     this.props.actions.setParam([param], event.target.value);
   }
 
@@ -44,6 +45,7 @@ class SuitBreak extends React.Component {
     }
     var k = 0;
     var setParam = _.curry(this.setParameter)
+console.log(`props.state: ${this.props.state}`);
 
     return (
       <div class="container">
