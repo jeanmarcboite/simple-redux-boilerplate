@@ -3,24 +3,28 @@ import rootReducer from '../reducers';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import DevTools from '../containers/DevTools';
-
+import persistState from 'redux-localstorage'
+import Logger from 'js-logger'
 /**
  * Entirely optional, this tiny library adds some functionality to
  * your DevTools, by logging actions/state to your console. Used in
  * conjunction with your standard DevTools monitor gives you great
  * flexibility!
  */
-const logger = createLogger({level: 'info', collapsed: true});
+const logger = createLogger({level: 'log', collapsed: true});
+Logger.setLevel(Logger.DEBUG);
 
 const finalCreateStore = compose(
   // Middleware you want to use in development:
   applyMiddleware(logger, thunk),
+  persistState(),
   // Required! Enable Redux DevTools with the monitors you chose
   DevTools.instrument()
 )(createStore);
 
-module.exports = function configureStore(initialState) {
-  const store = finalCreateStore(rootReducer, initialState);
+module.exports = function configureStore() {
+  const store = finalCreateStore(rootReducer);
+
 
   // Hot reload reducers (requires Webpack or Browserify HMR to be enabled)
   if (module.hot) {

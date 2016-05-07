@@ -7,18 +7,27 @@ import JsonInspector from 'react-json-inspector';
 import math from 'mathjs';
 
 class SuitBreak extends React.Component {
-  state = {
-    precision: this.props.state.get('precision'),
-    missing: this.props.state.get('missing'),
-    leftVacant: this.props.state.get('leftVacant'),
-    rightVacant: this.props.state.get('rightVacant')
-  }
-
   setParameter = (param, event) => {
     console.log(`setParameter ${param} to ${event.target.value}`);
-    this.setState({[param]: event.target.value});
     this.props.actions.setParam([param], event.target.value);
+    console.log(`after setParameter ${param} to ${event.target.value}: state = ${this.props.state}`);
   }
+
+  // Invoked whenever there is a prop change
+  // Called BEFORE render
+  componentWillReceiveProps = (nextProps) => {
+    // Not called for the initial render
+    // Previous props can be accessed by this.props
+    // Calling setState here does not trigger an an additional re-render
+
+    console.log(`componentWillReceiveProps: props = ${this.props}`);
+    console.log(`componentWillReceiveProps: props.state = ${this.props.state}`);
+    console.log(`componentWillReceiveProps: nextProps.state = ${nextProps.state}`);
+    console.log(`componentWillReceiveProps: state.missing = ${this.state.missing}`);
+
+    this.setState(nextProps.state);
+  }
+
 
   tableRow = () => {
     var data = [];
@@ -39,13 +48,33 @@ class SuitBreak extends React.Component {
     return data;
   }
 
+  componentWillMount() {
+    console.log('componentWillMount SuitBreak');
+    console.log(this.props.state)
+    console.log(this.state)
+    this.setState(this.props.state)
+    console.log(this.state)
+  }
+  componentDidMount() {
+    console.log('componentDidMount SuitBreak');
+  }
+  componentWillUpdate() {
+    console.log('componentWillUpdate SuitBreak');
+  }
+  componentDidUpdate() {
+    console.log('componentDidUpdate SuitBreak');
+  }
+
   render() {
+    console.log('render SuitBreak');
     var centerStyle = {
       textAlign: 'center'
     }
     var k = 0;
     var setParam = _.curry(this.setParameter)
-console.log(`props.state: ${this.props.state}`);
+    console.log("props.state, state ");
+    console.log(this.props.state);
+    console.log(this.state);
 
     return (
       <div class="container">
@@ -73,23 +102,23 @@ console.log(`props.state: ${this.props.state}`);
             {this.tableRow().map(item => (<tr key={item[0]}>{item.map(el => (<td key={k++}>{el}</td>))}</tr>))}
           </tbody>
         </Table>
-    </div>);
+      </div>);
+    }
   }
-}
 
-function mapStateToProps(state) {
-  return {
-    state: state.suitbreak
-  };
-}
+  function mapStateToProps(state) {
+    return {
+      state: state.suitbreak
+    };
+  }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(actions, dispatch)
-  };
-}
+  function mapDispatchToProps(dispatch) {
+    return {
+      actions: bindActionCreators(actions, dispatch)
+    };
+  }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SuitBreak);
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(SuitBreak);
