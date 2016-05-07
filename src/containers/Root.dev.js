@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import App from './App';
 import SuitBreak from '../components/SuitBreak';
+import HandDistribution from '../components/HandDistribution';
 import About from '../components/About';
 import Table from '../components/Table';
 import DevTools from './DevTools';
@@ -29,6 +30,7 @@ const history = syncHistoryWithStore(browserHistory, store);
           <Route name="home" path="/" component={App}>
             <Route name="about" path="about" component={About}/>
 <Route path="SuitBreak" component={SuitBreak}/>
+<Route path="HandDistribution" component={HandDistribution}/>
 <Route path="Table" component={Table}/>
 </Route>
           </Router>
