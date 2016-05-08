@@ -4,47 +4,72 @@ import { connect } from 'react-redux';
 import {Button, FormControl, Table} from 'react-bootstrap'
 import math from 'mathjs';
 
+function add_a_shorter_suit(hand) {
+  const newHand = []
+  for (var k = _.last(hand); k >= 0; k--)
+  newHand.push(_.concat(hand, k));
+  return newHand;
+}
+
+function numberOfEqualSuitLength(hand) {
+  return hand.reduce(function(dCount, currentD){
+      if(typeof dCount[currentD] !== "undefined"){
+        dCount[currentD]++;
+        return dCount;
+      } else {
+          dCount[currentD]=1;
+          return dCount;
+      }
+  }, {});
+}
+
+
 class HandDistribution extends React.Component {
+  isSorted = (array) => {
+    for (var i = 0; i < array.length - 1; i++)
+    if (array[i] < array[i + 1])
+    return false;
+    return true;
+  }
+
+
   tableRow = () => {
     var data = [];
+    const total = math.combinations(this.props.suit.count * this.props.suit.length, this.props.hand.length);
 
-    for (var d1 = 13; d1 >= 0; d1--) {
-      for (var d2 = 13 - d1; d2 >= 0; d2--) {
-        for (var d3 = 13 - (d1 + d2); d3 >= 0; d3--) {
-          var d4 = 13 - (d1 + d2 + d3);
-          if ((d4 <= d3) && (d3 <= d2) && (d2 <= d1)) {
-            var m = 24;
-            if (d4 == d3) {
-              if (d3 == d2)
-                m = 4;
-              else
-                m = 12;
-            }
-            else {
-              if (d3 == d2)
-                m = 12;
-              else if (d2 == d1) {
-                m = 12;
-              }
-            }
+// start with arrays of one suit
+var distributions = _.range(this.props.suit.length, 0).map(a => [a])
+// replace arrays with arrays of one suit more
+while (distributions[0].length < this.props.suit.count) {
+  distributions = _.flatMap(distributions.map(add_a_shorter_suit))
+}
+// filter distributions with wrong number of cards
+_.remove(distributions, el => _.reduce(el, (sum, n) => sum + n, 0) != this.props.hand.length);
 
-            var c12 = math.multiply(math.combinations(13, d1), math.combinations(13, d2))
-            var c34 = math.multiply(math.combinations(13, d3), math.combinations(13, d4))
-            var c1234 = math.multiply(c12, c34)
-            var cc = math.multiply(c1234, m);
+    for (var d of distributions) {
+// find number of duplicates
+            var dCount = numberOfEqualSuitLength(d)
+            // divide by prod of factorial
+            var div = (_.map(dCount, (x) => math.factorial(x))).reduce((p, y) => (p*y), 1);
+            // number of permutations of the suits
+            var m = math.divide(math.factorial(this.props.suit.count), div);
+            // number of permutations for that specific distribution
+            var combinations = d.map(x => math.combinations(this.props.suit.length, x)).reduce((p, y) => math.multiply(p, y), 1)
+            // total number of combinations: multiply by the permutation count
+            var cc = math.multiply(combinations, m);
 
-          data.push([((d1*13+d2)*13+d3)*13 + d4,d1, d2, d3, d4, cc, m]);
-        }
-      }
-    }
+          data.push(_.concat(d, [math.divide(math.multiply(cc, 100), total), cc, m]));
   }
 
   return data;
 }
 
 render = () => {
-  var centerStyle = {
+  const centerStyle = {
     textAlign: 'center'
+  }
+  const rightStyle = {
+    textAlign: 'right'
   }
   var key = 0;
 
@@ -54,14 +79,13 @@ render = () => {
         <caption><h2>Hand distribution probabilities</h2></caption>
         <thead>
           <tr>
-            <th style={centerStyle}>KEY</th>
-            <th colSpan="4" style={centerStyle}>Distribution</th>
+            <th colSpan={this.props.suit.count} style={centerStyle}>Distribution</th>
+              <th style={centerStyle}>Probability</th>
             <th style={centerStyle}>Combinations</th>
-            <th style={centerStyle}>Probability</th>
           </tr>
         </thead>
         <tbody id="table-body">
-          {this.tableRow().map(item => (<tr key={item[0]}>{item.map(el => (<td key={key++}>{el}</td>))}</tr>))}
+          {this.tableRow().map(item => (<tr key={key++}>{item.map(el => (<td key={key++} style={rightStyle}>{el}</td>))}</tr>))}
         </tbody>
       </Table>
     </div>);
@@ -70,7 +94,8 @@ render = () => {
 
 function mapStateToProps(state) {
   return {
-    state: state.handdistribution
+    suit: {count: 4, length: 13},
+    hand: {count: 4, length: 13}
   };
 }
 
