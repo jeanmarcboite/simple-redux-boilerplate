@@ -1,1 +1,1 @@
-exports.key = 'redux'; 
+exports.key = 'srb'; 
