@@ -33,7 +33,7 @@ class HandDistribution extends React.Component {
   componentWillMount = () => this.setState(this.props.state)
 
   handCombinations = (handCount) => math.combinations(this.props.suit.count * this.props.suit.length, this.props.hand.length * handCount);
-
+  probCombinations = (combinations, handCount) => math.divide(math.multiply(combinations, 100), this.handCombinations(handCount))
     tableRows = (handCount) => {
       var data = [];
 
@@ -46,6 +46,7 @@ class HandDistribution extends React.Component {
       // filter distributions with wrong number of cards
       _.remove(distributions, el => _.reduce(el, (sum, n) => sum + n, 0) != this.props.hand.length * handCount);
 
+var acc = 0;
       for (var d of distributions) {
         // find number of duplicates
         var dCount = numberOfEqualSuitLength(d)
@@ -57,8 +58,9 @@ class HandDistribution extends React.Component {
         var combinations = d.map(x => math.combinations(this.props.suit.length, x)).reduce((p, y) => math.multiply(p, y), 1)
         // total number of combinations: multiply by the permutation count
         var cc = math.multiply(combinations, m);
+        acc += cc;
 
-        data.push(_.concat(d, [math.divide(math.multiply(cc, 100), this.handCombinations(handCount)), cc, m]));
+        data.push(_.concat(d, [this.probCombinations(cc, handCount), cc, this.probCombinations(acc, handCount), acc]));
       }
 
       return data;
@@ -78,7 +80,7 @@ class HandDistribution extends React.Component {
         <Table striped bordered condensed hover>
           <caption><h2>Hand distribution probabilities</h2>
         <Checkbox checked={this.state.twohands} onChange={this.setChecked} >
-      2 Hands, {parseInt(this.handCombinations(this.state.twohands ? 2 : 1)).toLocaleString()} hand combinations
+      multiple ({this.state.twohands ? 2 : 1} hand{this.state.twohands ? "s" : ""}, {parseInt(this.handCombinations(this.state.twohands ? 2 : 1)).toLocaleString()} hand combinations)
     </Checkbox>
           </caption>
           <thead>
@@ -89,7 +91,7 @@ class HandDistribution extends React.Component {
             </tr>
           </thead>
           <tbody id="table-body">
-            {this.tableRows(this.state.twohands ? 2 : 1).map(item => (<tr key={key++}>{item.map(el => (<td key={key++} style={rightStyle}>{(el > 0.001) ? el.toLocaleString() : el}</td>))}</tr>))}
+            {this.tableRows(this.state.twohands ? 2 : 1).map(item => (<tr key={key++}>{item.map(el => (<td key={key++} style={rightStyle}>{(el > 0.01) ? el.toLocaleString() : el}</td>))}</tr>))}
           </tbody>
         </Table>
       </div>);
