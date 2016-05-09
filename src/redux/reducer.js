@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import {routerReducer} from 'react-router-redux';
 //import users from './users';
-import suitBreakReducer from '../components/SuitBreak/reducers';
-import handDistributionReducer from '../components/HandDistribution/reducers';
+import suitBreakReducer from './modules/suitbreak';
+import distributionReducer from './modules/distribution';
 
 /**
  * combineReducers is important to understand. As your app might grow in size
@@ -19,7 +19,7 @@ import handDistributionReducer from '../components/HandDistribution/reducers';
  */
 export default combineReducers({
   suitbreak: suitBreakReducer,
-  handdistribution: handDistributionReducer,
+  distribution: distributionReducer,
   //users: users,
   routing: routerReducer
 });
