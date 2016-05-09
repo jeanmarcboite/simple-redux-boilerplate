@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import App from './App';
-import SuitBreak from '../components/SuitBreak';
-import HandDistribution from '../components/HandDistribution';
-import About from '../components/About';
-import Table from '../components/Table';
-import DevTools from './DevTools';
-import { Router, Route, browserHistory } from 'react-router'
+import {App,
+  Home,
+  About,
+  HandDistribution,
+  SuitBreak
+} from './containers';
+
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore} from 'react-router-redux'
 
 /**
  * Component is exported for conditional usage in Root.js
  */
-module.exports = class Root extends Component {
+export default class Root extends Component {
   render() {
     const { store } = this.props;
 
@@ -27,12 +28,18 @@ const history = syncHistoryWithStore(browserHistory, store);
        */
       <Provider store={store}>
         <Router history={history}>
-          <Route name="home" path="/" component={App}>
-            <Route name="about" path="about" component={About}/>
-<Route path="SuitBreak" component={SuitBreak}/>
-<Route path="HandDistribution" component={HandDistribution}/>
-<Route path="Table" component={Table}/>
-</Route>
+          <Route path="/" component={App}>
+            { /* Home (main) route */ }
+            <IndexRoute component={Home}/>
+
+            { /* Routes */ }
+            <Route path="about" component={About}/>
+            <Route path="SuitBreak" component={SuitBreak}/> }
+            <Route path="Distribution/Hand" component={HandDistribution}/>
+
+            { /* Catch all route */ }
+            { /* <Route path="*" component={NotFound} status={404} />*/ }
+          </Route>
           </Router>
       </Provider>
     );

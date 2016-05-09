@@ -5,6 +5,7 @@ const initialState = () => {
   if (stored) {
     return JSON.parse(localStorage.getItem('redux')).distribution;
   }
+  console.log('return initialState');
   return {
     twoHands: false
   };
@@ -13,12 +14,13 @@ const initialState = () => {
 
 export default function distributionReducer(state = initialState(), action = {}) {
   'use strict';
-  console.log(`distributionReducer was called with state ${state}, and action ${action.type}`);
+  console.log(`distributionReducer was called with action ${action.type}`);
   switch (action.type) {
     case SET_PARAM:
-    var newstate = JSON.parse(JSON.stringify(state));
-    newstate[action.payload.name.toString()] = action.payload.value;
-    return newstate;
+    return {
+      ...state,
+      [action.payload.name]: action.payload.value
+    }
     default:
     return state;
   }

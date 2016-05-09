@@ -11,11 +11,9 @@ import './styles/main.scss';
  * See configureStore.js and Root.js for more details.
  */
 import { configureStore } from './store/configureStore';
-import { Root } from './containers/Root';
+import Root from './routes';
 
 const store = configureStore();
 
-ReactDOM.render(
-  <Root store={store} />,
-  document.getElementById('root')
-);
+ReactDOM.render(<Root store={store} />,
+                 document.getElementById('root'));

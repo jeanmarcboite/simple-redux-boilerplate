@@ -1,10 +1,6 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as TableActions from '../components/Table/actions';
-import Table from '../components/Table';
-import Footer from '../components/Footer';
-import DevTools from './DevTools';
 import {Link} from 'react-router';
 import {LinkContainer} from 'react-router-bootstrap';
 import {Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem, Glyphicon} from 'react-bootstrap';
@@ -58,7 +54,6 @@ class App extends React.Component {
    <LinkContainer to='/about'><NavItem >About</NavItem></LinkContainer>
     <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
     <LinkContainer to='/'><NavItem><Glyphicon glyph="home"/> Home</NavItem></LinkContainer>
-    <LinkContainer to='/Table'><NavItem><Glyphicon glyph="stats"/> Table</NavItem></LinkContainer>
       <MenuItem divider />
         <LinkContainer to='/about'><NavItem><Glyphicon  glyph="blackboard"/> About</NavItem></LinkContainer>
     </NavDropdown>
@@ -81,7 +76,6 @@ class App extends React.Component {
       <div>
         {this.navbarInstance}
         {this.props.children}
-        <DevTools />
         </div>
     );
   }
@@ -90,8 +84,8 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  users: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  //users: PropTypes.array.isRequired,
+  //actions: PropTypes.object.isRequired
 };
 
 /**
@@ -115,7 +109,6 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(TableActions, dispatch)
   };
 }
 

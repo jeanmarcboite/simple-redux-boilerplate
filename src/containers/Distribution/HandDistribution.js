@@ -3,7 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Button, FormControl, Table, RadioGroup, Radio, Checkbox} from 'react-bootstrap'
 import math from 'mathjs';
-import * as actions from './actions';
+import {setDistributionParam as setParam} from '../../redux/modules/distribution';
+import _ from 'lodash';
 
 function add_a_shorter_suit(hand) {
   const newHand = []
@@ -26,7 +27,7 @@ function numberOfEqualSuitLength(hand) {
 
 
 class HandDistribution extends React.Component {
-  setChecked = (event) => this.props.actions.set2Hands(event.target.checked)
+  setChecked = (event) => this.props.actions.setParam('twoHands', event.target.checked);
 
   componentWillReceiveProps = (nextProps) => this.setState(nextProps.state);
 
@@ -74,13 +75,12 @@ var acc = 0;
       textAlign: 'right'
     }
     var key = 0;
-
     return (
       <div class="container">
         <Table striped bordered condensed hover>
           <caption><h2>Hand distribution probabilities</h2>
-        <Checkbox checked={this.state.twohands} onChange={this.setChecked} >
-      multiple ({this.state.twohands ? 2 : 1} hand{this.state.twohands ? "s" : ""}, {parseInt(this.handCombinations(this.state.twohands ? 2 : 1)).toLocaleString()} hand combinations)
+        <Checkbox checked={this.state.twoHands} onChange={this.setChecked} >
+      multiple ({this.state.twoHands ? 2 : 1} hand{this.state.twoHands ? "s" : ""}, {parseInt(this.handCombinations(this.state.twoHands ? 2 : 1)).toLocaleString()} hand combinations)
     </Checkbox>
           </caption>
           <thead>
@@ -91,7 +91,7 @@ var acc = 0;
             </tr>
           </thead>
           <tbody id="table-body">
-            {this.tableRows(this.state.twohands ? 2 : 1).map(item => (<tr key={key++}>{item.map(el => (<td key={key++} style={rightStyle}>{(el > 0.01) ? el.toLocaleString() : el}</td>))}</tr>))}
+            {this.tableRows(this.state.twoHands ? 2 : 1).map(item => (<tr key={key++}>{item.map(el => (<td key={key++} style={rightStyle}>{(el > 0.01) ? el.toLocaleString() : el}</td>))}</tr>))}
           </tbody>
         </Table>
       </div>);
@@ -102,12 +102,12 @@ var acc = 0;
     return {
       suit: {count: 4, length: 13},
       hand: {count: 4, length: 13},
-      state: state.handdistribution
+      state: state.distribution
     };
   }
   function mapDispatchToProps(dispatch) {
     return {
-      actions: bindActionCreators(actions, dispatch)
+      actions: bindActionCreators({setParam}, dispatch)
     };
   }
 

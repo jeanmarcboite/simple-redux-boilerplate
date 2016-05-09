@@ -1,10 +1,9 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from '../reducers';
+import rootReducer from '../redux/reducer';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import DevTools from '../containers/DevTools';
 import persistState from 'redux-localstorage'
-import Logger from 'js-logger'
 /**
  * Entirely optional, this tiny library adds some functionality to
  * your DevTools, by logging actions/state to your console. Used in
@@ -12,7 +11,6 @@ import Logger from 'js-logger'
  * flexibility!
  */
 const logger = createLogger({level: 'log', collapsed: true});
-Logger.setLevel(Logger.DEBUG);
 
 const finalCreateStore = compose(
   // Middleware you want to use in development:
@@ -24,14 +22,6 @@ const finalCreateStore = compose(
 
 module.exports = function configureStore() {
   const store = finalCreateStore(rootReducer);
-
-
-  // Hot reload reducers (requires Webpack or Browserify HMR to be enabled)
-  if (module.hot) {
-    module.hot.accept('../reducers', () =>
-      store.replaceReducer(require('../reducers'))
-    );
-  }
 
   return store;
 };
