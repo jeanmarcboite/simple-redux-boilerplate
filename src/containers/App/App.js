@@ -50,7 +50,7 @@ class App extends React.Component {
   </Navbar.Header>
   <Nav>
     <LinkContainer to='/SuitBreak'><NavItem>Suit Break</NavItem></LinkContainer>
-    <LinkContainer to='/HandDistribution'><NavItem>Hand Distribution</NavItem></LinkContainer>
+    <LinkContainer to='/Distribution/Hand'><NavItem>Hand Distribution</NavItem></LinkContainer>
    <LinkContainer to='/about'><NavItem >About</NavItem></LinkContainer>
     <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
     <LinkContainer to='/'><NavItem><Glyphicon glyph="home"/> Home</NavItem></LinkContainer>

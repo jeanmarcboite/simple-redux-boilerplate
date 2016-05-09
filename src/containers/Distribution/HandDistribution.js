@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Button, FormControl, Table, RadioGroup, Radio, Checkbox} from 'react-bootstrap'
 import math from 'mathjs';
-import {setDistributionParam as setParam} from '../../redux/modules/distribution';
+import {setParam, prefix} from '../../redux/modules/distribution';
 import _ from 'lodash';
 
 function add_a_shorter_suit(hand) {
@@ -102,7 +102,7 @@ var acc = 0;
     return {
       suit: {count: 4, length: 13},
       hand: {count: 4, length: 13},
-      state: state.distribution
+      state: state[prefix]
     };
   }
   function mapDispatchToProps(dispatch) {

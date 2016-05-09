@@ -2,17 +2,19 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Button, FormControl, Table} from 'react-bootstrap'
-import * as actions from './actions';
-import JsonInspector from 'react-json-inspector';
 import math from 'mathjs';
+import {setParam, prefix} from '../../redux/modules/suitbreak';
+import _ from 'lodash';
 
 class SuitBreak extends React.Component {
   setParameter = (param, event) => this.props.actions.setParam([param], event.target.value);
 
   componentWillReceiveProps = (nextProps) => this.setState(nextProps.state);
 
-  componentWillMount = () => this.setState(this.props.state)
-
+  componentWillMount = () => {
+    console.log(this.props)
+    this.setState(this.props.state)
+}
   tableRow = () => {
     var data = [];
     let vacant = math.add(this.state.leftVacant, this.state.rightVacant);
@@ -71,13 +73,13 @@ class SuitBreak extends React.Component {
 
   function mapStateToProps(state) {
     return {
-      state: state.suitbreak
+      state: state[prefix]
     };
   }
 
   function mapDispatchToProps(dispatch) {
     return {
-      actions: bindActionCreators(actions, dispatch)
+      actions: bindActionCreators({setParam}, dispatch)
     };
   }
 

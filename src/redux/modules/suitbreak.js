@@ -1,9 +1,14 @@
-const SET_PARAM = 'suitbreak/SET_PARAM';
+import persist from '../persist';
+
+const PREFIX = 'suitbreak';
+const SET_PARAM = PREFIX + '/SET_PARAM';
+
+exports.prefix = PREFIX;
 
 const initialState = () => {
-  var stored = localStorage.getItem('redux');
+  var stored = localStorage.getItem(persist.key);
   if (stored) {
-        return JSON.parse(localStorage.getItem('redux')).suitbreak;
+        return JSON.parse(localStorage.getItem(persist.key))[PREFIX];
     }
     return {
       precision: 1,
@@ -14,19 +19,21 @@ const initialState = () => {
 };
 
 export default function suitBreakReducer(state = initialState(), action = {}) {
-  console.log(`suitBreakReducer was called with state ${state}, and action ${action.type}`);
+  console.log(`suitBreakReducer was called with action ${action.type}`);
+  console.log(state);
   switch (action.type) {
     case SET_PARAM:
-      var newstate = JSON.parse(JSON.stringify(state));
-      newstate[action.payload.name.toString()] = action.payload.value;
-      return newstate;
-      
+    return {
+      ...state,
+      [action.payload.name]: action.payload.value
+  }
+
     default:
       return state;
   }
 }
 
-export function setSuitBreakParam(param, value) {
+export function setParam(param, value) {
   return {
   type: SET_PARAM,
   payload: {name: param, value: value}

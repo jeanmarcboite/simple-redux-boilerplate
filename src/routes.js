@@ -4,7 +4,8 @@ import {App,
   Home,
   About,
   HandDistribution,
-  SuitBreak
+  SuitBreak,
+  NotFound
 } from './containers';
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
@@ -38,7 +39,7 @@ const history = syncHistoryWithStore(browserHistory, store);
             <Route path="Distribution/Hand" component={HandDistribution}/>
 
             { /* Catch all route */ }
-            { /* <Route path="*" component={NotFound} status={404} />*/ }
+            <Route path="*" component={NotFound} status={404} />
           </Route>
           </Router>
       </Provider>

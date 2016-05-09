@@ -1,9 +1,14 @@
-const SET_PARAM = 'distribution/SET_PARAM';
+import persist from '../persist';
+
+const PREFIX = 'distribution';
+const SET_PARAM = PREFIX + '/SET_PARAM';
+
+exports.prefix = PREFIX;
 
 const initialState = () => {
-  var stored = localStorage.getItem('redux');
+  var stored = localStorage.getItem(persist.key);
   if (stored) {
-    return JSON.parse(localStorage.getItem('redux')).distribution;
+    return JSON.parse(localStorage.getItem(persist.key))[PREFIX];
   }
   console.log('return initialState');
   return {
@@ -26,17 +31,9 @@ export default function distributionReducer(state = initialState(), action = {})
   }
 }
 
-export function setDistributionParam(param, value) {
+export function setParam(param, value) {
   return {
     type: SET_PARAM,
     payload: {name: param, value: value}
-  };
-}
-
-
-export function set2Hands(bool) {
-  return {
-    type: 'SET_2HANDS',
-    payload: bool
   };
 }
