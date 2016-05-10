@@ -13,16 +13,10 @@ import persist from '../redux/persist';
  */
 const logger = createLogger({level: 'log', collapsed: true});
 
-// do not store navigation
-const persistPaths = ['distribution', 'suitbreak'];
-const persistConfig = {
-  key : persist.key
-}
-
 const finalCreateStore = compose(
   // Middleware you want to use in development:
   applyMiddleware(logger, thunk),
-  persistState(persistPaths, persistConfig),
+  persistState(persist.paths, persist.config),
   // Required! Enable Redux DevTools with the monitors you chose
   DevTools.instrument()
 )(createStore);

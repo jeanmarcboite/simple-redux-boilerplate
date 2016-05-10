@@ -4,6 +4,7 @@ import {App,
   Home,
   About,
   HandDistribution,
+  PartnershipDistribution,
   SuitBreak,
   NotFound
 } from './containers';
@@ -36,7 +37,8 @@ const history = syncHistoryWithStore(browserHistory, store);
             { /* Routes */ }
             <Route path="about" component={About}/>
             <Route path="SuitBreak" component={SuitBreak}/> }
-            <Route path="Distribution/Hand" component={HandDistribution}/>
+              <Route path="Distribution/Hand" component={HandDistribution}/>
+                <Route path="Distribution/Partnership" component={PartnershipDistribution}/>
 
             { /* Catch all route */ }
             <Route path="*" component={NotFound} status={404} />

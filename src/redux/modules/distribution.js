@@ -6,13 +6,15 @@ const SET_PARAM = PREFIX + '/SET_PARAM';
 exports.prefix = PREFIX;
 
 const initialState = () => {
-  var stored = localStorage.getItem(persist.key);
+  var stored = localStorage.getItem(persist.config.key);
   if (stored) {
-    return JSON.parse(localStorage.getItem(persist.key))[PREFIX];
+    return JSON.parse(localStorage.getItem(persist.config.key))[PREFIX];
   }
   console.log('return initialState');
   return {
-    twoHands: false
+    twoHands: false,
+    cardCount: 5,
+    precision: 1
   };
 };
 
