@@ -11,7 +11,8 @@ const initialState = () => {
     return JSON.parse(localStorage.getItem(persist.config.key))[PREFIX];
   }
   console.log('return initialState');
-  return {
+    return {
+        HCPrange: 1,
     twoHands: false,
     cardCount: 5,
     precision: 1
@@ -22,6 +23,7 @@ const initialState = () => {
 export default function distributionReducer(state = initialState(), action = {}) {
   'use strict';
   console.log(`distributionReducer was called with action ${action.type}`);
+  console.log(state);
   switch (action.type) {
     case SET_PARAM:
     return {

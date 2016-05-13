@@ -63,20 +63,38 @@ class HCPDistribution extends React.Component {
             textAlign: 'right'
         }
         var key = 0;
-
+        const setParam = _.curry(this.setParameter)
         const handCombinations = math.combinations(this.props.suit.count * this.props.suit.length, this.props.hand.length * (this.state.twoHands ? 2 : 1));
         const probability = (combinations) => math.divide(math.multiply(combinations, 100), handCombinations);
 
         const data = [];
+        var sum = 0;
         const addRow = (combinations, hcp) => {
-            data.push([hcp, probability(combinations), combinations]);
+            sum += combinations;
+            data.push([hcp, probability(combinations), probability(sum), combinations]);
         }
         _.forEach(this.tableRows(this.state.twoHands ? 2 : 1), addRow);
+
+        var rangeData = data;
+        const HCPrange = parseInt(this.state.HCPrange);
+        if (HCPrange > 0) {
+            rangeData = [];
+            sum = 0;
+            for (var i = 0; i < data.length - HCPrange; i++) {
+                var combinations = 0;
+                const hcp = parseInt(data[i][0]);
+                for (var k = i; k <= i +  HCPrange; k++)
+                    combinations += data[k][3];
+                rangeData.push([`${hcp} - ${hcp + HCPrange}`, probability(combinations), data[i +  HCPrange][2], combinations]);
+            }
+        }
 
         return (
                 <div class="container">
                 <Table striped bordered condensed hover>
-                <caption><h2>High card points probabilities</h2>
+                <caption><h2>HCPs probabilities, with a range of
+          <input type="number" min="0" max="37" value={this.state.HCPrange} onChange={setParam('HCPrange')}/>
+            points</h2>
                 <Checkbox checked={this.state.twoHands} onChange={this.setChecked} >
                 multiple ({this.state.twoHands ? 2 : 1} hand{this.state.twoHands ? "s" : ""}, {handCombinations.toLocaleString()} hand combinations)
             </Checkbox>
@@ -84,12 +102,13 @@ class HCPDistribution extends React.Component {
                 <thead>
                 <tr>
                 <th style={centerStyle}>High Cards Points</th>
-                <th style={centerStyle}>Probability</th>
+                <th style={centerStyle}>Probability (%)</th>
+                <th style={centerStyle}>&#x2211;(%)</th>
                 <th style={centerStyle}>Combinations</th>
                 </tr>
                 </thead>
                 <tbody id="table-body">
-                {data.map(item => (<tr key={key++}>{item.map(el => (<td key={key++} style={rightStyle}>{(el > 0.01) ? el.toLocaleString() : el}</td>))}</tr>))}
+                {rangeData.map(item => (<tr key={key++}>{item.map(el => (<td key={key++} style={rightStyle}>{(el > 0.01) ? el.toLocaleString() : el}</td>))}</tr>))}
             </tbody>
                 </Table>
                 </div>);
