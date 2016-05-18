@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {routerReducer} from 'react-router-redux';
 //import users from './users';
+import diagramReducer from './modules/diagram';
 import suitBreakReducer from './modules/suitbreak';
 import distributionReducer from './modules/distribution';
 
@@ -18,6 +19,7 @@ import distributionReducer from './modules/distribution';
  * More info: http://rackt.org/redux/docs/api/combineReducers.html
  */
 export default combineReducers({
+  diagram: diagramReducer,
   suitbreak: suitBreakReducer,
   distribution: distributionReducer,
   //users: users,

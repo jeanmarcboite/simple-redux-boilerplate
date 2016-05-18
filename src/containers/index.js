@@ -4,5 +4,6 @@ export HandDistribution from './Distribution/HandDistribution';
 export PartnershipDistribution from './Distribution/PartnershipDistribution';
 export HCPDistribution from './Distribution/HCPDistribution';
 export SuitBreak from './SuitBreak/SuitBreak';
+export Diagram from './Diagram/Diagram';
 export About from './About/About';
 export NotFound from './NotFound/NotFound';
