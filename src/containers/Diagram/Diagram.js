@@ -47,7 +47,7 @@ class Diagram extends React.Component {
             </NavDropdown>
           </Nav>
           <FormGroup controlId="formHorizontalEmail">
-          <FormControl type="text" placeholder="Deal id..." size="33"/>
+          <FormControl type="text" placeholder="Deal id..." onChange={setParam('ID')} size="33"/>
           <FormControl componentClass="select" onChange={setParam('IDbase')} value={this.state.IDbase}>
         <option value="0">Hand Notation</option>
         <option value="10">Decimal ID</option>
@@ -57,7 +57,7 @@ class Diagram extends React.Component {
           </FormGroup>
           </Form>
         </Navbar>
-        <DealDiagram id="456"/>
+        <DealDiagram id="687465130"/>
       </div>);
   }
 }
