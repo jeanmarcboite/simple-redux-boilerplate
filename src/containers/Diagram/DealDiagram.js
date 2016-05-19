@@ -40,12 +40,13 @@ class HandDiagram extends React.Component {
  
 export default class DealDiagram extends React.Component {
   render = () => {
+    console.log("render deal " + this.props.id);
     const dealer = new Dealer();
     const deal = new Deal(dealer);
     deal.id = this.props.id;
    const hands = deal.hn.split(' ');
     return (<div class="container">
-      <h1>Page {deal.id + 1}</h1>
+      <h1>Page {parseInt(deal.id) + 1}</h1>
       <Grid>
         <Row clsName="show-grid">
           <Col md={4}></Col>

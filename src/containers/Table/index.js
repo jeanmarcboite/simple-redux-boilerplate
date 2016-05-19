@@ -10,7 +10,6 @@ import JsonInspector from 'react-json-inspector';
 
 class Table extends React.Component {
   render() {
-    console.log('render Table');
     return (
       <div className="table-container">
         <BootstrapTable data={this.props.users}>

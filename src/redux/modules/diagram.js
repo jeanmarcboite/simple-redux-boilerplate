@@ -11,19 +11,39 @@ const initialState = () => {
         return JSON.parse(localStorage.getItem(persist.config.key))[PREFIX];
     }
     return {
-      IDbase: 10
+        ID: 0,
+        IDbase: 10
     };
 };
 
+const setState = (state, name, value) => {
+    var newState = undefined;
+
+    switch (name) {
+    case 'IDbase':
+    console.log(parseInt(state.ID, state.IDbase))
+        newState = {
+                ...state,
+            ID: parseInt(state.ID, state.IDbase).toString(value),
+            [name]: value
+        }
+        break;
+      default:
+        newState = {
+                ...state,
+            [name]: value
+        }
+    }
+
+    console.log(newState);
+    return newState;
+}   
+
 export default function diagramReducer(state = initialState(), action = {}) {
   console.log(`diagramReducer was called with action ${action.type}`);
-  console.log(state);
   switch (action.type) {
-    case SET_PARAM:
-    return {
-      ...state,
-      [action.payload.name]: action.payload.value
-  }
+  case SET_PARAM:
+      return setState(state, action.payload.name, action.payload.value);
 
     default:
       return state;

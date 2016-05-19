@@ -13,13 +13,11 @@ export class Deck {
     constructor(config) {
         /** get the card face from index = 0..size  */
         this.cardFace = config.suits.trim().replace(/\./g, '').split('');
-        console.log(`cardFace: ${this.cardFace}`)
         /** "A42.KQ6":Array[Array[String]] = Array(Array(A, 4, 2), Array(K, Q, 6)) */
         this.suitCardFace = config.suits.trim().split('.').map(s => s.split(''))
         /** the number of cards in each suit (0 until suitCount) */
         this.suitLength = this.suitCardFace.map(s => s.length)
         this.suitIndex = __.scanLeft(this.suitLength, math.add, 0);
-        console.log(`suitIndex ${this.suitIndex}`);
         /** the suit names */
         this.suitNames = config.suitNames.trim().split('.');
         /** the name of a suit */
@@ -48,7 +46,6 @@ export class Deck {
     /** one hand to hand notation */
     hand2hn = (hand) => {
         const with0 = _.concat(0, hand);
-        console.log(`with0 ${with0}`)
         var withSuitDot = "";
         for (let i = 0; i < hand.length; i++) {
             withSuitDot += _.repeat('.', this.suitSkip(with0[i], with0[i + 1]))
@@ -56,7 +53,6 @@ export class Deck {
         }
 
         const trailingDots = _.repeat('.', this.suitSkip((hand.length == 0) ? 0 : _.last(hand), this.size - 1))
-        console.log(`last = ${_.last(hand)}-${this.size - 1} trailingDots: ${trailingDots}`)
         return (withSuitDot) + trailingDots
     }
     /** all hands to hand notation  */
@@ -64,7 +60,6 @@ export class Deck {
         let hn = "";
         
         for (let seat = 0; seat < hands.length; seat++) {
-            console.log(`seat ${seat}, hand = ${hands[seat]}, hn = ${this.hand2hn(hands[seat])}`);
             if (seat > 0)
                 hn += ' ';
             hn += this.hand2hn(hands[seat]);

@@ -12,7 +12,6 @@ class SuitBreak extends React.Component {
   componentWillReceiveProps = (nextProps) => this.setState(nextProps.state);
 
   componentWillMount = () => {
-    console.log(this.props)
     this.setState(this.props.state)
 }
   tableRow = () => {

@@ -11,8 +11,8 @@ import {Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem,
 import DealDiagram from './DealDiagram';
 
 class Diagram extends React.Component {
-  logevent = (eventKey, event) => console.log(event.target)
-    setParameter = (param, event) => this.props.actions.setParam([param], event.target.value);
+  logevent = (eventKey, event) => console.log(event.target);
+    setParameter = (param, event) => this.props.actions.setParam(param, event.target.value);
 
   componentWillReceiveProps = (nextProps) => this.setState(nextProps.state);
 
@@ -20,6 +20,10 @@ class Diagram extends React.Component {
     console.log(this.props)
       this.setState(this.props.state)
   }
+
+  setID = (event) =>  {
+    console.log(event.target.value);
+    }
   render = () => {
     var centerStyle = {
       textAlign: 'center'
@@ -46,10 +50,10 @@ class Diagram extends React.Component {
             <NavDropdown eventKey={10} id="display-nav-dropdown" title="Display">
             </NavDropdown>
           </Nav>
-          <FormGroup controlId="formHorizontalEmail">
-          <FormControl type="text" placeholder="Deal id..." onChange={setParam('ID')} size="33"/>
+          <FormGroup controlId="formDealID">
+          <FormControl type="text" placeholder="Deal id..." onChange={setParam('ID')} value={this.state.ID} size="33"/>
           <FormControl componentClass="select" onChange={setParam('IDbase')} value={this.state.IDbase}>
-        <option value="0">Hand Notation</option>
+        <option value="10">Hand Notation (TODO)</option>
         <option value="10">Decimal ID</option>
         <option value="16">Hexadecimal</option>
         <option value="36">Base 36</option>
@@ -57,7 +61,7 @@ class Diagram extends React.Component {
           </FormGroup>
           </Form>
         </Navbar>
-        <DealDiagram id="687465130"/>
+        <DealDiagram id={parseInt(this.state.ID, this.state.IDbase)}/>
       </div>);
   }
 }
