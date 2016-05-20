@@ -23,7 +23,7 @@ export default class Andrews extends Algorithm {
         // for the second hand, index range from 0 to 8122425444,
         // for the third hand, index range from 0 to 10400600,
         const indexes = []
-        var i = math.bignumber(id)
+        var i = math.bignumber(id).mod(board.indexMaxProd[0])
 
         for (var seat = 0; seat < board.seatCount - 1; seat ++) {
             var x = math.fix(math.divide(i, board.indexMaxProd[seat + 1]));

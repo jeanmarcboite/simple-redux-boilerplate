@@ -10,6 +10,8 @@ import {Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem,
         DropdownButton, FormGroup, FormControl, Glyphicon} from 'react-bootstrap';
 import DealDiagram from './DealDiagram';
 import RandomOrg from 'random-org'
+import math from 'mathjs'
+
 //import {XMLHttpRequest} from 'xmlhttprequest'
 // from http://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies/
 const getContent = function(url) {
@@ -40,12 +42,17 @@ class Diagram extends React.Component {
   randomOrg = () => {
     var xhr = new XMLHttpRequest();
     // xhr.open("GET","https://www.random.org/integers/?num=10&min=0&col=10&base=16&max=65535&format=plain&rnd=new")
-    xhr.open('GET', 'http://qrng.anu.edu.au/API/jsonI.php?type=hex16&size=1&length=50')
+    xhr.open('GET', 'http://qrng.anu.edu.au/API/jsonI.php?type=hex16&size=1&length=20')
       xhr.withCredentials = false;
     
     xhr.onload = (e) => {
       if (xhr.status == 200) {
-        console.log(xhr.responseText)
+        console.log(xhr.responseText);
+        console.log(JSON.parse(xhr.responseText).data);
+        var x = ["0x"].concat(JSON.parse(xhr.responseText).data).join('')
+        var id = math.bignumber(x)
+        console.log(id.toString());
+        this.props.actions.setParam('ID', id.toString());
       }
       console.log(xhr.status)
     }
@@ -100,7 +107,7 @@ class Diagram extends React.Component {
           </FormGroup>
           </Form>
         </Navbar>
-        <DealDiagram id={parseInt(this.state.ID, this.state.IDbase)}/>
+        <DealDiagram id={this.state.ID}/>
       </div>);
   }
 }
