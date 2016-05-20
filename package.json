@@ -40,6 +40,8 @@
     "lodash": "^4.11.1",
     "mathjs": "^3.2.1",
     "node-sass": "^3.4.2",
+    "qrand": "^0.1.3",
+    "random-org": "^0.1.5",
     "react": "^15.0.2",
     "react-bootstrap": "^0.29.3",
     "react-bootstrap-table": "^2.2.0",
@@ -68,6 +70,7 @@
   "dependencies": {
     "babel-plugin-add-module-exports": "^0.2.0",
     "babel-preset-stage-0": "^6.5.0",
-    "es6-module-loader": "^0.17.11"
+    "es6-module-loader": "^0.17.11",
+    "xmlhttprequest": "^1.8.0"
   }
 }

@@ -9,10 +9,49 @@ import {Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem,
         Form, InputGroup,
         DropdownButton, FormGroup, FormControl, Glyphicon} from 'react-bootstrap';
 import DealDiagram from './DealDiagram';
-
+import RandomOrg from 'random-org'
+//import {XMLHttpRequest} from 'xmlhttprequest'
+// from http://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies/
+const getContent = function(url) {
+  // return new pending promise
+  return new Promise((resolve, reject) => {
+    // select http or https module, depending on reqested url
+    const lib = url.startsWith('https') ? require('https') : require('http');
+    const request = lib.get(url, (response) => {
+      // handle http errors
+      if (response.statusCode < 200 || response.statusCode > 299) {
+         reject(new Error('Failed to load page, status code: ' + response.statusCode));
+       }
+      // temporary data holder
+      const body = [];
+      // on every content chunk, push it to the data array
+      response.on('data', (chunk) => body.push(chunk));
+      // we are done, resolve promise with those joined chunks
+      response.on('end', () => resolve(body.join('')));
+    });
+    // handle connection errors of the request
+    request.on('error', (err) => reject(err))
+    })
+};
 class Diagram extends React.Component {
   logevent = (eventKey, event) => console.log(event.target);
-    setParameter = (param, event) => this.props.actions.setParam(param, event.target.value);
+  setParameter = (param, event) => this.props.actions.setParam(param, event.target.value);
+
+  randomOrg = () => {
+    var xhr = new XMLHttpRequest();
+    // xhr.open("GET","https://www.random.org/integers/?num=10&min=0&col=10&base=16&max=65535&format=plain&rnd=new")
+    xhr.open('GET', 'http://qrng.anu.edu.au/API/jsonI.php?type=hex16&size=1&length=50')
+      xhr.withCredentials = false;
+    
+    xhr.onload = (e) => {
+      if (xhr.status == 200) {
+        console.log(xhr.responseText)
+      }
+      console.log(xhr.status)
+    }
+    
+    xhr.send();
+  }
 
   componentWillReceiveProps = (nextProps) => this.setState(nextProps.state);
 
@@ -41,10 +80,10 @@ class Diagram extends React.Component {
           <Form inline>
           <Nav>
             <NavDropdown eventKey={1} id="deal-nav-dropdown" title="Deal">
-              <MenuItem eventkey="1.1" onSelect={this.logevent}>New</MenuItem>
-              <MenuItem eventkey="{1.2}" onSelect={this.logevent}>Random.org</MenuItem>
+              <MenuItem eventkey="1.1" onSelect={this.logevent} className="disabled">New</MenuItem>
+              <MenuItem eventkey="{1.2}" onSelect={this.randomOrg}>Random.org</MenuItem>
               <MenuItem eventkey="{1.2}" onSelect={this.logevent}>Random</MenuItem>
-              <MenuItem eventkey="{1.2}" onSelect={this.logevent}>Save</MenuItem>
+              <MenuItem eventkey="{1.2}" onSelect={this.logevent} className="disabled">Save</MenuItem>
               <MenuItem divider />
             </NavDropdown>
             <NavDropdown eventKey={10} id="display-nav-dropdown" title="Display">

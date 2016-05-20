@@ -13,6 +13,11 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/static/'
   },
+  devServer: {
+    headers: {
+      "Access-Control-Allow-Origin": "http://qrng.anu.edu.au/*",
+    }
+  },
   plugins: [
     /**
      * This is where the magic happens! You need this to enable Hot Module Replacement!
@@ -31,6 +36,10 @@ module.exports = {
      * Here, we use it to specify a development build.
      */
     new webpack.DefinePlugin({
+      // Force HTMLtoJSX to use the in-browser `document` object rather than
+      // require the Node-only "jsdom" package.
+      // You need this to use XMLHttpRequest
+      IN_BROWSER: true,
       'process.env.NODE_ENV': JSON.stringify('development')
     }),
   ],
