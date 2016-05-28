@@ -6,7 +6,7 @@ import {App,
   HandDistribution,
   PartnershipDistribution,
   HCPDistribution,
-  Diagram,
+  DiagramEditor,
   SuitBreak,
   NotFound
 } from './containers';
@@ -38,7 +38,7 @@ export default class Root extends Component {
 
             { /* Routes */ }
             <Route path="about" component={About}/>
-            <Route path="Diagram" component={Diagram}/> }
+            <Route path="DiagramEditor" component={DiagramEditor}/> }
             <Route path="SuitBreak" component={SuitBreak}/> }
               <Route path="Distribution/Hand" component={HandDistribution}/>
               <Route path="Distribution/Partnership" component={PartnershipDistribution}/>

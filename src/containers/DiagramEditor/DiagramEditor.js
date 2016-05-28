@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {setParam, prefix} from '../../redux/modules/diagram';
+import {setParam, prefix} from '../../redux/modules/diagrameditor';
 import _ from 'lodash';
 import {Link} from 'react-router';
 import {LinkContainer} from 'react-router-bootstrap';
@@ -35,7 +35,7 @@ const getContent = function(url) {
     request.on('error', (err) => reject(err))
     })
 };
-class Diagram extends React.Component {
+class DiagramEditor extends React.Component {
   logevent = (eventKey, event) => console.log(event.target);
   setParameter = (param, event) => this.props.actions.setParam(param, event.target.value);
 
@@ -127,4 +127,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Diagram);
+)(DiagramEditor);

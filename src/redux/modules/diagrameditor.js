@@ -1,6 +1,6 @@
 import persist from '../persist';
 
-const PREFIX = 'diagram';
+const PREFIX = 'diagrameditor';
 const SET_PARAM = PREFIX + '/SET_PARAM';
 
 exports.prefix = PREFIX;
@@ -39,8 +39,8 @@ const setState = (state, name, value) => {
     return newState;
 }   
 
-export default function diagramReducer(state = initialState(), action = {}) {
-  console.log(`diagramReducer was called with action ${action.type}`);
+export default function diagramEditorReducer(state = initialState(), action = {}) {
+  console.log(`diagramEditorReducer was called with action ${action.type}`);
   switch (action.type) {
   case SET_PARAM:
       return setState(state, action.payload.name, action.payload.value);

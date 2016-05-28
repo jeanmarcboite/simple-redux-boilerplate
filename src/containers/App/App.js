@@ -49,7 +49,7 @@ class App extends React.Component {
         </Navbar.Brand>
       </Navbar.Header>
       <Nav>
-        <LinkContainer to='/Diagram'><NavItem>Diagram Editor</NavItem></LinkContainer>
+        <LinkContainer to='/DiagramEditor'><NavItem>Diagram Editor</NavItem></LinkContainer>
         <LinkContainer to='/SuitBreak'><NavItem>Suit Break</NavItem></LinkContainer>
         <NavDropdown eventKey={2} id="distribution-nav-dropdown" title="Distribution">
           <LinkContainer to='/Distribution/Hand'><NavItem>Hand Distribution</NavItem></LinkContainer>
