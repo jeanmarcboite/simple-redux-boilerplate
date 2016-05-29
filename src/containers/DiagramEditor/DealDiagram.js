@@ -1,7 +1,7 @@
 import React from 'react';
 import Deal from '../../modules/Deal.js';
 import Dealer from '../../modules/Dealer.js';
-import {ListGroup, ListGroupItem, Grid, Row, Col} from 'react-bootstrap'
+import {Button, ButtonGroup, ListGroup, ListGroupItem, Grid, Row, Col} from 'react-bootstrap'
 
 const redColor = {
       color: 'red'
@@ -12,7 +12,13 @@ const blackColor = {
     }
 const blueColor = {
       color: 'blue'
-    }
+}
+const selected = {
+    backgroundColor: 'lightgrey'
+}
+
+const unselected = {
+}
 
 const suits = [
   <span style={blueColor}>?</span>,
@@ -25,46 +31,40 @@ const suits = [
 const suitSymbol = (suit) => (suit + 1 < suits.length) ? suits[suit + 1] : suits[0]
 
 class HandDiagram extends React.Component {
-  suitSymbol  = (suit) => <span style={redColor}>♥</span>
-  suitDisplay = (hand, suit) => (<ListGroupItem key={suit}>{suitSymbol(suit)} {hand.split('').join(' ').replace(/T/g, '10')} </ListGroupItem>)
+    suitDisplay = (hand, suit) => (<ListGroupItem key={suit} onClick={this.props.onClick} style={this.props.style}>{suitSymbol(suit)} {hand.split('').join(' ').replace(/T/g, '10')} </ListGroupItem>)
     
   render = () => {
-    var redColor = {
-      color: 'red'
-    }
-
     const hand = this.props.hand.split('.');
     return (<ListGroup>{hand.map(this.suitDisplay)}</ListGroup>);
   }
 };
+
  
 export default class DealDiagram extends React.Component {
-  render = () => {
-    console.log("render deal " + this.props.id);
-    const dealer = new Dealer();
-    const deal = new Deal(dealer);
-    deal.id = this.props.id;
-   const hands = deal.hn.split(' ');
+   handSelected = (suit) => (suit == this.props.selected) ? selected : unselected
+    render = () => {
+   const hands = this.props.deal.hn.split(' ');
     return (<div class="container">
-      <h1>Page {parseInt(deal.id) + 1}</h1>
+      <h1>Page {parseInt(this.props.deal.id) + 1}</h1>
       <Grid>
-        <Row clsName="show-grid">
+        <Row className="show-grid">
           <Col md={4}></Col>
-          <Col md={4}><HandDiagram hand={hands[0]}/></Col>
+          <Col md={4}><HandDiagram hand={hands[0]} onClick={_.curry(this.props.handleClick)(0)} style={this.handSelected(0)}/></Col>
           <Col md={4}></Col>
         </Row>
-        <Row clsName="show-grid">
-          <Col md={4}><HandDiagram hand={hands[3]}/></Col>
-          <Col md={4}></Col>
-          <Col md={4}><HandDiagram hand={hands[1]}/></Col>
+        <Row className="show-grid">
+          <Col md={4}><HandDiagram hand={hands[3]} onClick={_.curry(this.props.handleClick)(3)} style={this.handSelected(3)}/></Col>
+            <Col md={4}>
+            {this.props.children}
+            </Col>
+          <Col md={4}><HandDiagram hand={hands[1]} onClick={_.curry(this.props.handleClick)(1)} style={this.handSelected(1)}/></Col>
         </Row>
-        <Row clsName="show-grid">
+        <Row className="show-grid">
           <Col md={4}></Col>
-          <Col md={4}><HandDiagram hand={hands[2]}/></Col>
+          <Col md={4}><HandDiagram hand={hands[2]} onClick={_.curry(this.props.handleClick)(2)} style={this.handSelected(2)}/></Col>
           <Col md={4}></Col>
         </Row>
       </Grid>
-      {deal.hn}
     </div>);
   }
 }

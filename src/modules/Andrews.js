@@ -58,5 +58,8 @@ export default class Andrews extends Algorithm {
     }
 
     owner2id(owner) {
+        var id = 0;
+
+        return id;
     }
 }

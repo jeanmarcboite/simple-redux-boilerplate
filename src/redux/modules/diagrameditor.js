@@ -12,6 +12,7 @@ const initialState = () => {
         return JSON.parse(localStorage.getItem(persist.config.key))[PREFIX];
     }
     return {
+        hn: '',
         ID: 0,
         IDbase: 10
     };

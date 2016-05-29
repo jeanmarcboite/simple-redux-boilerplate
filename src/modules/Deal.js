@@ -8,24 +8,37 @@ module.exports = class Deal {
         this.algorithm = new (((algorithm||'andrews').toLowerCase() == 'pavlicek') ? Pavlicek : Andrews);
     }
 
+    /** string (BigInt) */
     __id = undefined
+    /** hand notation: KQ6.QT4..  */
     __hn = undefined
+    /** Array[52]  */
     __owner = undefined
 
     get id() {
         return this.__id;
     }
+
     set id(v) {
         this.__id = v;
         delete this.__owner
         delete this.__hn
     }
+
     get hn() {
-        if (this.__hn === undefined) {
-            this.__owner = this.algorithm.id2owner(this.dealer.board, this.__id);
+        if (this.__hn === undefined || this.__hn === '') {
+            if (this.__id !== undefined) {
+                this.__owner = this.algorithm.id2owner(this.dealer.board, this.__id);
+            }
             this.__hn = this.dealer.board.deck.hands2hn(this.owner2hands(this.__owner));
         }
         return this.__hn;
+    }
+
+    set hn(v) {
+        delete this.__id
+        delete this.__owner
+        this.__hn = v;
     }
 
     owner2hands(owner) {
@@ -41,5 +54,19 @@ module.exports = class Deal {
 
         return hands;
     }
-    
+
+    owner = (suit, face) => this.__owner[this.dealer.board.deck.indexOf(suit, face)]
+
+    setOwner = (suit, face, seat) => {
+        if (this.__owner === undefined) {
+            if (this.__id === undefined) {
+                this.__owner = new Array(board.deck.size).fill(board.seatCount - 1);
+            } else {
+                this.__owner = this.algorithm.id2owner(this.dealer.board, this.__id);
+                delete this.__id;
+            }
+        }
+        this.__owner[this.dealer.board.deck.indexOf(suit, face)] = seat;
+        this.__hn = this.dealer.board.deck.hands2hn(this.owner2hands(this.__owner));
+    }
 }
