@@ -1,4 +1,5 @@
 import persist from '../persist';
+import bigInt from 'big-integer';
 
 const PREFIX = 'diagrameditor';
 const SET_PARAM = PREFIX + '/SET_PARAM';
@@ -16,15 +17,17 @@ const initialState = () => {
     };
 };
 
+const getID = (state) => bigInt(state.ID, state.IDbase)
+
 const setState = (state, name, value) => {
     var newState = undefined;
 
     switch (name) {
     case 'IDbase':
-    console.log(parseInt(state.ID, state.IDbase))
+        console.log(getID(state))
         newState = {
                 ...state,
-            ID: parseInt(state.ID, state.IDbase).toString(value),
+            ID: getID(state).toString(value),
             [name]: value
         }
         break;
@@ -37,7 +40,7 @@ const setState = (state, name, value) => {
 
     console.log(newState);
     return newState;
-}   
+}
 
 export default function diagramEditorReducer(state = initialState(), action = {}) {
   console.log(`diagramEditorReducer was called with action ${action.type}`);
