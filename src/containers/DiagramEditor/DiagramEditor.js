@@ -126,6 +126,7 @@ class DiagramEditor extends React.Component {
         const dealer = new Dealer();
         this.deal = new Deal(dealer);
         this.deal.id = this.props.state.ID;
+        this.handleSelect(0);
     }
 
     get id() {
