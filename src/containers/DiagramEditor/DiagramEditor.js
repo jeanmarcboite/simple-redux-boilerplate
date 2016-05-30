@@ -83,10 +83,13 @@ class DiagramEditor extends React.Component {
         // this will change the state, so don't need to force update
         this.handleSelect(this.state.selected);
     }
-// I know I do not use event, but I need it so I can curry the function!
+    // I know I do not use event, but I need it so I can curry the function!
+    // It is not possible to specify a default to 'hand', or the function will be called
+    // instead of curried, and there will be a loop, because state is changed during render
     handleSelect = (hand, event) => {
+        const selected = hand || 0
         const seatComplete = this.deal.seatComplete;
-        for (let h = hand; h < seatComplete.length + hand; h++) {
+        for (let h = selected; h < seatComplete.length + selected; h++) {
             if (!seatComplete[h % seatComplete.length]) {
                 this.props.actions.setParam('selected', h);
                 return;
@@ -131,8 +134,7 @@ class DiagramEditor extends React.Component {
             this.deal.hn = this.props.state.hn;
         else
             this.deal.id = this.props.state.ID;
-        console.log(this.deal.hands)
-        this.handleSelect(0);
+        this.handleSelect(this.props.state.selected);
     }
 
     get id() {
