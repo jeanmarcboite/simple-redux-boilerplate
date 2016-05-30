@@ -43,7 +43,7 @@ class HandDiagram extends React.Component {
 export default class DealDiagram extends React.Component {
    handSelected = (suit) => (suit == this.props.selected) ? selected : unselected
     render = () => {
-   const hands = this.props.deal.hn.split(' ');
+   const hands = (this.props.deal.hn || '... ... ... ...').split(' ');
     return (<div class="container">
       <h1>Page {parseInt(this.props.deal.id) + 1}</h1>
       <Grid>

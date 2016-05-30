@@ -21,7 +21,7 @@ const initialState = () => {
 const getID = (state) => bigInt(state.ID, state.IDbase)
 
 const setState = (state, name, value) => {
-    var newState = undefined;
+    let newState = undefined;
 
     switch (name) {
     case 'IDbase':
@@ -31,7 +31,15 @@ const setState = (state, name, value) => {
             ID: getID(state).toString(value),
             [name]: value
         }
-        break;
+            break;
+        case 'hn':
+            console.log(`set hn: ${value}`)
+            newState = {
+                ...state,
+                ID: bigInt(0),
+                [name]: value
+            }
+            break;
       default:
         newState = {
                 ...state,

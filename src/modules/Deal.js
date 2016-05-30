@@ -25,12 +25,21 @@ module.exports = class Deal {
         delete this.__hn
     }
 
-    get hn() {
-        if (this.__hn === undefined || this.__hn === '') {
+    get owner() {
+        if (this.__owner === undefined) {
             if (this.__id !== undefined) {
                 this.__owner = this.algorithm.id2owner(this.dealer.board, this.__id);
+            } else {
+               this.__owner = new Array(this.dealer.board.deck.size).fill(undefined); 
             }
-            this.__hn = this.dealer.board.deck.hands2hn(this.owner2hands(this.__owner));
+        }
+
+        return this.__owner
+    }
+
+    get hn() {
+        if (this.__hn === undefined || this.__hn === '') {
+            this.__hn = this.dealer.board.deck.hands2hn(this.owner2hands(this.owner));
         }
         return this.__hn;
     }
@@ -46,27 +55,26 @@ module.exports = class Deal {
         for (let seat = 0; seat < this.dealer.board.seatCount; seat++) {
             hands.push([]);
         }
-
-        for (let i = 0; i < owner.length; i++) {
-            if (owner[i] >= 0 && owner[i] < this.dealer.board.seatCount)
-                hands[owner[i]].push(i);
+        if (owner !== undefined) {
+            this.__owner = new Array(this.dealer.board.deck.size).fill(this.dealer.board.seatCount - 1); 
+            for (let i = 0; i < owner.length; i++) {
+                if (owner[i] >= 0 && owner[i] < this.dealer.board.seatCount)
+                    hands[owner[i]].push(i);
+            }
         }
 
         return hands;
     }
 
-    owner = (suit, face) => this.__owner[this.dealer.board.deck.indexOf(suit, face)]
+    getOwner = (suit, face) => this.owner[this.dealer.board.deck.indexOf(suit, face)]
 
     setOwner = (suit, face, seat) => {
-        if (this.__owner === undefined) {
-            if (this.__id === undefined) {
-                this.__owner = new Array(board.deck.size).fill(board.seatCount - 1);
-            } else {
-                this.__owner = this.algorithm.id2owner(this.dealer.board, this.__id);
-                delete this.__id;
-            }
-        }
+        // get owner
+        this.owner
+        // we are going to change the owner, the id will not be valid any more
+        delete this.__id
         this.__owner[this.dealer.board.deck.indexOf(suit, face)] = seat;
         this.__hn = this.dealer.board.deck.hands2hn(this.owner2hands(this.__owner));
+        delete this.__id
     }
 }

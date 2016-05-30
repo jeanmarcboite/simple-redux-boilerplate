@@ -39,7 +39,7 @@ const TDgetContent = function(url) {
 };
 
 class MissingListItem extends React.Component {
-    style = (suit, face) => (this.props.deal.owner(suit, face) === undefined) ? 'primary' : 'warning'
+    style = (suit, face) => (this.props.deal.getOwner(suit, face) === undefined) ? 'primary' : 'warning'
     render = () => {
         return (
             <li
@@ -78,18 +78,18 @@ class DiagramEditor extends React.Component {
         }
         if (event.ctrlKey) {
             deal.setOwner(suit, face, undefined)
-        } else if (deal.owner(suit, face) == undefined) {
+        } else if (deal.getOwner(suit, face) == undefined) {
 
             console.log('ASSIGN')
         }
-        console.log(deal.__owner)
+        console.log(deal.owner)
         console.log(deal.hn)
-        this.setState({ID: 0, hn: deal.hn});
+        this.props.actions.setParam('hn', deal.hn);
     }
 
     handleSelect = (hand, event) => {
-        console.log('select')
-        this.setState({selected: hand})
+        console.log(`select hand ${hand}`);
+        //this.props.actions.setParam('selected', hand);
     }
 
     randomOrg = () => {
