@@ -70,6 +70,21 @@ export class Deck {
 
         return hn;
     }
+    /** hand notation to one hand */
+    hn2hand = (hn) => {
+        const hand = []
+        const h = hn.split('.');
+        for (let suit = 0; suit < h.length; suit++)
+            for (let k = 0; k < h[suit].length; k++)
+                hand.push(this.indexOf(suit, h[suit][k]))
+        return hand;
+    }
+    /** hand notation to all hands */
+    hn2hands = (hn) => {
+        const hands = []
+        for (h in hn.split('.'))
+            hands.push(this.hn2hand(h))
+    }
 }
 
 export class Board {
@@ -107,5 +122,4 @@ export default class Dealer {
         this.config = Object.assign(defaults, config);
         this.board = new Board(this.config); 
     }
-
 }

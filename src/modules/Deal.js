@@ -10,8 +10,10 @@ module.exports = class Deal {
 
     /** string (BigInt) */
     __id = undefined
-    /** hand notation: KQ6.QT4..  */
+    /** hand notation: KQ6.QT4..  JT2.K96..  */
     __hn = undefined
+    /** hands: [[1, 2, 8, 15, 17, 23],[3,4,12,14,18,21],[],[]]  */
+    __hands = undefined
     /** Array[52]  */
     __owner = undefined
 
@@ -20,9 +22,21 @@ module.exports = class Deal {
     }
 
     set id(v) {
+        this.reset()
+        console.log(`setting id to ${v}`)
         this.__id = v;
+    }
+
+    reset() {
+        delete this.__id
         delete this.__owner
+        delete this.__hands
         delete this.__hn
+    }
+
+    set owner(owner) {
+        this.reset()
+        this.__owner = owner
     }
 
     get owner() {
@@ -37,17 +51,34 @@ module.exports = class Deal {
         return this.__owner
     }
 
+    get hands() {
+        if (this.__hands == undefined) {
+            if (this.__hn)
+                this.__hands = this.hn2hands(this.__hn)
+            else
+                this.__hands = this.owner2hands(this.owner)
+        }
+        return this.__hands;
+    }
+
     get hn() {
         if (this.__hn === undefined || this.__hn === '') {
-            this.__hn = this.dealer.board.deck.hands2hn(this.owner2hands(this.owner));
+            this.__hn = this.dealer.board.deck.hands2hn(this.hands);
         }
         return this.__hn;
     }
 
     set hn(v) {
-        delete this.__id
-        delete this.__owner
+        this.reset()
         this.__hn = v;
+    }
+
+    get seatComplete() {
+        const complete = []
+        for (let seat = 0; seat < this.dealer.board.seatCount; seat++) {
+            complete.push(this.hands[seat].length == this.dealer.board.seatLength[seat]);
+        }
+        return complete;
     }
 
     owner2hands(owner) {
@@ -56,7 +87,6 @@ module.exports = class Deal {
             hands.push([]);
         }
         if (owner !== undefined) {
-            this.__owner = new Array(this.dealer.board.deck.size).fill(this.dealer.board.seatCount - 1); 
             for (let i = 0; i < owner.length; i++) {
                 if (owner[i] >= 0 && owner[i] < this.dealer.board.seatCount)
                     hands[owner[i]].push(i);
@@ -66,15 +96,17 @@ module.exports = class Deal {
         return hands;
     }
 
+    hn2hands = (hn) => (hn == undefined) ? new Array(this.dealer.board.seatCount).fill([]) : this.board.deck.hn2hands(hn)
+
     getOwner = (suit, face) => this.owner[this.dealer.board.deck.indexOf(suit, face)]
 
     setOwner = (suit, face, seat) => {
-        // get owner
-        this.owner
-        // we are going to change the owner, the id will not be valid any more
-        delete this.__id
-        this.__owner[this.dealer.board.deck.indexOf(suit, face)] = seat;
-        this.__hn = this.dealer.board.deck.hands2hn(this.owner2hands(this.__owner));
-        delete this.__id
+        console.log(this.seatComplete)
+        if ((seat == undefined) || !this.seatComplete[seat]) {
+            // we are going to change the owner, other fields must be invalidated
+            this.owner = this.owner  // implicit call to reset vi set owner
+            // assign to seat
+            this.__owner[this.dealer.board.deck.indexOf(suit, face)] = seat;
+        }
     }
 }

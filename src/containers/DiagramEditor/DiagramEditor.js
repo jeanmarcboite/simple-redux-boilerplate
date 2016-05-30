@@ -69,27 +69,29 @@ class DiagramEditor extends React.Component {
     logevent = (eventKey, event) => console.log(event.target);
     setParameter = (param, event) => this.props.actions.setParam(param, event.target.value);
 
-
     handleClick = (deal, suit, face, event) => {
         if (event.altKey) {
-            console.log(event.target)
             console.log(deal)
-            console.log(event)
         }
         if (event.ctrlKey) {
             deal.setOwner(suit, face, undefined)
         } else if (deal.getOwner(suit, face) == undefined) {
-
-            console.log('ASSIGN')
+            deal.setOwner(suit, face, this.state.selected);
         }
-        console.log(deal.owner)
-        console.log(deal.hn)
-        this.props.actions.setParam('hn', deal.hn);
+        //this.props.actions.setParam('hn', deal.hn);
+        // this will change the state, so don't need to force update
+        this.handleSelect(this.state.selected);
     }
-
+// I know I do not use event, but I need it so I can curry the function!
     handleSelect = (hand, event) => {
-        console.log(`select hand ${hand}`);
-        //this.props.actions.setParam('selected', hand);
+        const seatComplete = this.deal.seatComplete;
+        for (let h = hand; h < seatComplete.length + hand; h++) {
+            if (!seatComplete[h % seatComplete.length]) {
+                this.props.actions.setParam('selected', h);
+                return;
+            }
+        }
+        this.props.actions.setParam('selected', undefined);
     }
 
     randomOrg = () => {
@@ -114,6 +116,8 @@ class DiagramEditor extends React.Component {
     }
     // Invoked when a component is receiving new props. This method is not called for the initial render.
     componentWillReceiveProps = (nextProps) => {
+        console.log('componentWillReceiveProps');
+        console.log(nextProps.state)
         this.setState(nextProps.state);
     }
     // invoked once, both on the client and server, immediately before the initial rendering occurs. 
@@ -121,6 +125,7 @@ class DiagramEditor extends React.Component {
         this.setState(this.props.state)
         const dealer = new Dealer();
         this.deal = new Deal(dealer);
+        this.deal.id = this.props.state.ID;
     }
 
     get id() {
@@ -132,14 +137,7 @@ class DiagramEditor extends React.Component {
         }
         var key = 0;
         var setParam = _.curry(this.setParameter)
-
-        if (this.hn)
-            this.deal.hn = this.hn;
-        else if (this.id > 0)
-            this.deal.id = this.id;
-        console.log(this.deal);
-
-        return (<div>
+        let html = (<div>
                 <Navbar>
                     <Navbar.Header>
                         <Navbar.Brand>
@@ -172,10 +170,12 @@ class DiagramEditor extends React.Component {
                         </FormGroup>
                     </Form>
                 </Navbar>
-                <DealDiagram deal={this.deal} selected={this.state.selected} handleClick={this.handleSelect}>
+                <DealDiagram deal={this.deal} selected={this.state.selected} handleSelect={this.handleSelect}>
                     <MissingDiagram deal={this.deal} handleClick={this.handleClick}/>
                 </DealDiagram>
         </div>);
+
+        return html;
     }
 }
 
