@@ -23,7 +23,6 @@ module.exports = class Deal {
 
     set id(v) {
         this.reset()
-        console.log(`setting id to ${v}`)
         this.__id = v;
     }
 
@@ -44,7 +43,7 @@ module.exports = class Deal {
             if (this.__id !== undefined) {
                 this.__owner = this.algorithm.id2owner(this.dealer.board, this.__id);
             } else {
-               this.__owner = new Array(this.dealer.board.deck.size).fill(undefined); 
+                this.__owner = this.hands2owner(this.hands)
             }
         }
 
@@ -96,12 +95,20 @@ module.exports = class Deal {
         return hands;
     }
 
+    hands2owner(hands) {
+        let owner = new Array(this.dealer.board.deck.size).fill(undefined)
+        for (let hand in hands) {
+            for (let i in hands[hand])
+                owner[hands[hand][i]] = hand;
+        }
+        return owner;
+    }
+
     hn2hands = (hn) => (hn == undefined) ? new Array(this.dealer.board.seatCount).fill([]) : this.dealer.board.deck.hn2hands(hn)
 
     getOwner = (suit, face) => this.owner[this.dealer.board.deck.indexOf(suit, face)]
 
     setOwner = (suit, face, seat) => {
-        console.log(this.seatComplete)
         if ((seat == undefined) || !this.seatComplete[seat]) {
             // we are going to change the owner, other fields must be invalidated
             this.owner = this.owner  // implicit call to reset vi set owner
