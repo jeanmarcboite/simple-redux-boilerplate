@@ -80,12 +80,7 @@ export class Deck {
         return hand;
     }
     /** hand notation to all hands */
-    hn2hands = (hn) => {
-        const hands = []
-        for (const h in hn.split('.'))
-            hands.push(this.hn2hand(h))
-        return hands
-    }
+    hn2hands = (hn) => hn.split('.').map(h => this.hn2hand(h));
 }
 
 export class Board {
