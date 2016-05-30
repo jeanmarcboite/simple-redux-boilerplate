@@ -60,7 +60,7 @@ class MissingDiagram extends React.Component {
     suitDisplay = (faces, suit) => (<MissingListItem key={suit} suit={suit} faces={faces} deal={this.props.deal} handleClick={this.props.handleClick}/>)
     
     render = () => {
-        const hand =this.props.deal.dealer.board.deck.suitCardFace
+        const hand = this.props.deal.dealer.board.deck.suitCardFace
         return (<ListGroup>{hand.map(this.suitDisplay)}</ListGroup>);
     }
 };
@@ -78,7 +78,8 @@ class DiagramEditor extends React.Component {
         } else if (deal.getOwner(suit, face) == undefined) {
             deal.setOwner(suit, face, this.state.selected);
         }
-        //this.props.actions.setParam('hn', deal.hn);
+        // set this.props.state.hn, so it will be persisted in the store
+        this.props.actions.setParam('hn', deal.hn);
         // this will change the state, so don't need to force update
         this.handleSelect(this.state.selected);
     }
@@ -122,10 +123,15 @@ class DiagramEditor extends React.Component {
     }
     // invoked once, both on the client and server, immediately before the initial rendering occurs. 
     componentWillMount = () => {
+        console.log(`componentWillMount: ID = ${this.props.state.ID}, hn = ${this.props.state.hn}`)
         this.setState(this.props.state)
         const dealer = new Dealer();
         this.deal = new Deal(dealer);
-        this.deal.id = this.props.state.ID;
+        if (this.props.state.hn)
+            this.deal.hn = this.props.state.hn;
+        else
+            this.deal.id = this.props.state.ID;
+        console.log(this.deal.hands)
         this.handleSelect(0);
     }
 

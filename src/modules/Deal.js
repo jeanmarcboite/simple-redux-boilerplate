@@ -96,7 +96,7 @@ module.exports = class Deal {
         return hands;
     }
 
-    hn2hands = (hn) => (hn == undefined) ? new Array(this.dealer.board.seatCount).fill([]) : this.board.deck.hn2hands(hn)
+    hn2hands = (hn) => (hn == undefined) ? new Array(this.dealer.board.seatCount).fill([]) : this.dealer.board.deck.hn2hands(hn)
 
     getOwner = (suit, face) => this.owner[this.dealer.board.deck.indexOf(suit, face)]
 

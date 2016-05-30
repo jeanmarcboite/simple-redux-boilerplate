@@ -8,11 +8,11 @@ exports.prefix = PREFIX;
 
 const initialState = () => {
   var stored = localStorage.getItem(persist.config.key);
-  if (false) {
+  if (stored) {
         return JSON.parse(localStorage.getItem(persist.config.key))[PREFIX];
     }
     return {
-        hn: '',
+        hn: undefined,
         ID: undefined,
         IDbase: 10
     };
@@ -22,7 +22,6 @@ const getID = (state) => bigInt(state.ID, state.IDbase)
 
 const setState = (state, name, value) => {
     let newState = undefined;
-    console.log('setState: from:')
 
     switch (name) {
     case 'IDbase':
@@ -46,14 +45,10 @@ const setState = (state, name, value) => {
             [name]: value
         }
     }
-console.log('to: ')
-    console.log(newState);
     return newState;
 }
 
 export default function diagramEditorReducer(state = initialState(), action = {}) {
-    console.log(`diagramEditorReducer was called with action ${action.type} and state`);
-    console.log(state)
   switch (action.type) {
   case SET_PARAM:
       return setState(state, action.payload.name, action.payload.value);

@@ -82,8 +82,9 @@ export class Deck {
     /** hand notation to all hands */
     hn2hands = (hn) => {
         const hands = []
-        for (h in hn.split('.'))
+        for (const h in hn.split('.'))
             hands.push(this.hn2hand(h))
+        return hands
     }
 }
 
