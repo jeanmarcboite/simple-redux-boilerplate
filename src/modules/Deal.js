@@ -51,7 +51,7 @@ module.exports = class Deal {
         if (this.__owner === undefined) {
             if (this.__id !== undefined) {
                 this.__owner = this.id2owner(this.__id);
-            } else  if (this.__hn) {
+            } else  if (this.__hn !== undefined) {
                 this.__owner = this.hands2owner(this.hands)
             } else {
                 this.__owner = new Array(this.dealer.board.deck.size).fill(undefined)
@@ -89,6 +89,10 @@ module.exports = class Deal {
             complete.push(this.hands[seat].length == this.dealer.board.seatLength[seat]);
         }
         return complete;
+    }
+
+    get allSeatComplete() {
+        return this.seatComplete.find(x => !x) === undefined;
     }
 
     owner2hands(owner) {

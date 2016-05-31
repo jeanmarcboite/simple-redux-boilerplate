@@ -5,7 +5,7 @@ import {setParam, prefix} from '../../redux/modules/diagrameditor';
 import _ from 'lodash';
 import {Link} from 'react-router';
 import {LinkContainer} from 'react-router-bootstrap';
-import {Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem,
+import {Modal, Navbar, Nav, NavItem, NavItemLink, NavDropdown, MenuItem,
         Form, InputGroup, ListGroup, Button, ButtonGroup,
         DropdownButton, FormGroup, FormControl, Glyphicon} from 'react-bootstrap';
 import bigInt from 'big-integer';
@@ -43,19 +43,30 @@ class DiagramEditor extends React.Component {
     logevent = (eventKey, event) => console.log(event.target);
     setParameter = (param, event) => this.props.actions.setParam(param, event.target.value);
 
+    openModal = () => {
+        this.setState({showModal: true})
+    }
+
+    hideModal = () => {
+        this.setState({showModal: false})
+    }
+
     handleClick = (deal, suit, face, event) => {
         if (event.altKey) {
             console.log(deal)
         }
-        if (event.ctrlKey) {
-            deal.setOwner(suit, face, undefined)
-        } else if (deal.getOwner(suit, face) == undefined) {
-            deal.setOwner(suit, face, this.state.selected);
+        if (!this.state.editable) {
+            this.openModal();
+        } else {
+            if (event.ctrlKey) {
+                deal.setOwner(suit, face, undefined)
+            } else if (deal.getOwner(suit, face) == undefined) {
+                deal.setOwner(suit, face, this.state.selected);
+            }
+            // set this.props.state.hn, so it will be persisted in the store
+            this.props.actions.setParam('hn', deal.hn);
+            this.handleSelect(this.state.selected);
         }
-        // set this.props.state.hn, so it will be persisted in the store
-        this.props.actions.setParam('hn', deal.hn);
-        // this will change the state, so don't need to force update
-        this.handleSelect(this.state.selected);
     }
     // I know I do not use event, but I need it so I can curry the function!
     // It is not possible to specify a default to 'hand', or the function will be called
@@ -96,19 +107,24 @@ class DiagramEditor extends React.Component {
         
         xhr.send();
     }
+
+    newDeal = () => {
+        this.props.actions.setParam('hn', undefined);
+    }
+
     setDeal = (state) => {
-        console.log('setDeal')
-        console.log(state)
         if (this.deal == undefined) {
             const dealer = new Dealer();
             this.deal = new Deal(dealer);
         }
-        if (state.hn)
+
+        if (state.ID == undefined)
             this.deal.hn = state.hn;
         else if (state.IDbase == 0)
             this.deal.hn = state.ID;
         else
             this.deal.id = bigInt(state.ID, state.IDbase).toString();
+
         this.setState(state);
     }
     // Invoked when a component is receiving new props. This method is not called for the initial render.
@@ -129,6 +145,7 @@ class DiagramEditor extends React.Component {
     }
     
     render = () => {
+
         var centerStyle = {
             textAlign: 'center'
         }
@@ -146,7 +163,7 @@ class DiagramEditor extends React.Component {
                             <NavDropdown eventKey={1} id="deal-nav-dropdown" title="Deal">
                                 <MenuItem eventkey="{1.2}" onSelect={this.randomQrng}>Random from qrng.anu.edu.au</MenuItem>
                                 <MenuItem divider />
-                                <MenuItem eventkey="{1.4}" onSelect={this.logevent} className="disabled">New</MenuItem>
+                                <MenuItem eventkey="{1.4}" onSelect={this.newDeal}>New</MenuItem>
                                 <MenuItem eventkey="{1.5}" onSelect={this.logevent} className="disabled">Edit</MenuItem>
                                 <MenuItem eventkey="{1.6}" onSelect={this.logevent} className="disabled">Edit with keyboard</MenuItem>
                                 <MenuItem eventkey="{1.4}" onSelect={this.logevent} className="disabled">Save</MenuItem>
@@ -168,6 +185,15 @@ class DiagramEditor extends React.Component {
                 <DealDiagram deal={this.deal} selected={this.state.selected} handleSelect={this.handleSelect}>
                     <MissingDiagram deal={this.deal} handleClick={this.handleClick}/>
                 </DealDiagram>
+                <Modal show={this.state.showModal} onHide={this.hideModal}>
+                    <Modal.Body>
+                        <h3>The diagram is not editable</h3>
+                        You must first select 'Edit' in the deal menu
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.hideModal}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
         </div>);
 
         return html;

@@ -24,6 +24,9 @@ export default class MissingDiagram extends React.Component {
     suitDisplay = (faces, suit) => (<MissingListItem key={suit} suit={suit} faces={faces} deal={this.props.deal} handleClick={this.props.handleClick}/>)
     
     render = () => {
+        if (this.props.deal.allSeatComplete)
+            return (<div/>);
+
         const hand = this.props.deal.dealer.board.deck.suitCardFace
         return (<ListGroup>{hand.map(this.suitDisplay)}</ListGroup>);
     }
