@@ -51,6 +51,13 @@ class DiagramEditor extends React.Component {
         this.setState({showModal: false})
     }
 
+    toggleEdit = () => {
+        this.setState({
+            editable: !this.state.editable,
+            showModal: false
+        })
+    }
+
     handleClick = (deal, suit, face, event) => {
         if (event.altKey) {
             console.log(deal)
@@ -101,6 +108,8 @@ class DiagramEditor extends React.Component {
                     this.props.actions.setParam('ID', id.toString(this.state.IDbase));
                 else 
                     this.props.actions.setParam('ID', id.toString(16))
+
+                this.setState({editable: false})
             }
             console.log(xhr.status)
         }
@@ -164,8 +173,7 @@ class DiagramEditor extends React.Component {
                                 <MenuItem eventkey="{1.2}" onSelect={this.randomQrng}>Random from qrng.anu.edu.au</MenuItem>
                                 <MenuItem divider />
                                 <MenuItem eventkey="{1.4}" onSelect={this.newDeal}>New</MenuItem>
-                                <MenuItem eventkey="{1.5}" onSelect={this.logevent} className="disabled">Edit</MenuItem>
-                                <MenuItem eventkey="{1.6}" onSelect={this.logevent} className="disabled">Edit with keyboard</MenuItem>
+                                <MenuItem eventkey="{1.5}" onSelect={this.toggleEdit}>{(this.state.editable) ? 'Finish edit' : 'Edit'}</MenuItem>
                                 <MenuItem eventkey="{1.4}" onSelect={this.logevent} className="disabled">Save</MenuItem>
                             </NavDropdown>
                             <NavDropdown eventKey={10} id="display-nav-dropdown" title="Display">
@@ -183,14 +191,16 @@ class DiagramEditor extends React.Component {
                     </Form>
                 </Navbar>
                 <DealDiagram deal={this.deal} selected={this.state.selected} handleSelect={this.handleSelect}>
-                    <MissingDiagram deal={this.deal} handleClick={this.handleClick}/>
+                    <MissingDiagram deal={this.deal} handleClick={this.handleClick} editable={this.state.editable}/>
                 </DealDiagram>
                 <Modal show={this.state.showModal} onHide={this.hideModal}>
                     <Modal.Body>
                         <h3>The diagram is not editable</h3>
-                        You must first select 'Edit' in the deal menu
+                        You must first select 'Edit' in the deal menu, or
+                        choose the 'Edit' button below.
                     </Modal.Body>
                     <Modal.Footer>
+                        <Button onClick={this.toggleEdit}>Edit</Button>
                         <Button onClick={this.hideModal}>Close</Button>
                     </Modal.Footer>
                 </Modal>
