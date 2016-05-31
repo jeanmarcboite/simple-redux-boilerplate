@@ -52,10 +52,17 @@ class DiagramEditor extends React.Component {
     }
 
     toggleEdit = () => {
+        const editable = !this.state.editable;
+        if (!editable)
+            this.props.actions.setParam('selected', undefined);
+        else 
+            this.props.actions.setParam('selected', 0);
+
         this.setState({
-            editable: !this.state.editable,
+            editable: editable,
             showModal: false
         })
+        console.log(this.state)
     }
 
     handleClick = (deal, suit, face, event) => {
@@ -79,12 +86,15 @@ class DiagramEditor extends React.Component {
     // It is not possible to specify a default to 'hand', or the function will be called
     // instead of curried, and there will be a loop, because state is changed during render
     handleSelect = (hand, event) => {
-        const selected = hand || 0
-        const seatComplete = this.deal.seatComplete;
-        for (let h = selected; h < seatComplete.length + selected; h++) {
-            if (!seatComplete[h % seatComplete.length]) {
-                this.props.actions.setParam('selected', h);
-                return;
+        if (this.state && this.state.editable) { 
+            this.props.actions.setParam('selected', undefined);
+            const selected = hand || 0
+            const seatComplete = this.deal.seatComplete;
+            for (let h = selected; h < seatComplete.length + selected; h++) {
+                if (!seatComplete[h % seatComplete.length]) {
+                    this.props.actions.setParam('selected', h);
+                    return;
+                }
             }
         }
         this.props.actions.setParam('selected', undefined);
