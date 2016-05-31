@@ -19,8 +19,6 @@ const initialState = () => {
 };
 
 export default function suitBreakReducer(state = initialState(), action = {}) {
-  console.log(`suitBreakReducer was called with action ${action.type}`);
-  console.log(state);
   switch (action.type) {
     case SET_PARAM:
     return {

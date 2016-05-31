@@ -85,35 +85,49 @@ class DiagramEditor extends React.Component {
                 var x = JSON.parse(xhr.responseText).data.join('')
                 var id = bigInt(x, 16)
                 console.log(id.toString());
-                this.props.actions.setParam('ID', id.toString(this.state.IDbase));
+
+                if (this.state.IDbase > 0) 
+                    this.props.actions.setParam('ID', id.toString(this.state.IDbase));
+                else 
+                    this.props.actions.setParam('ID', id.toString(16))
             }
             console.log(xhr.status)
         }
         
         xhr.send();
     }
+    setDeal = (state) => {
+        console.log('setDeal')
+        console.log(state)
+        if (this.deal == undefined) {
+            const dealer = new Dealer();
+            this.deal = new Deal(dealer);
+        }
+        if (state.hn)
+            this.deal.hn = state.hn;
+        else if (state.IDbase == 0)
+            this.deal.hn = state.ID;
+        else
+            this.deal.id = bigInt(state.ID, state.IDbase).toString();
+        this.setState(state);
+    }
     // Invoked when a component is receiving new props. This method is not called for the initial render.
     componentWillReceiveProps = (nextProps) => {
-        console.log('componentWillReceiveProps');
-        console.log(nextProps.state)
-        this.setState(nextProps.state);
+        this.setDeal(nextProps.state)
     }
     // invoked once, both on the client and server, immediately before the initial rendering occurs. 
     componentWillMount = () => {
-        console.log(`componentWillMount: ID = ${this.props.state.ID}, hn = ${this.props.state.hn}`)
-        this.setState(this.props.state)
-        const dealer = new Dealer();
-        this.deal = new Deal(dealer);
-        if (this.props.state.hn)
-            this.deal.hn = this.props.state.hn;
-        else
-            this.deal.id = this.props.state.ID;
+        this.setDeal(this.props.state)
         this.handleSelect(this.props.state.selected);
     }
 
     get id() {
+        if (this.state.IDbase == 0)
+            return this.state.ID;
+
         return bigInt(this.state.ID, this.state.IDbase).toString();
     }
+    
     render = () => {
         var centerStyle = {
             textAlign: 'center'

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {ListGroup, Button, ButtonGroup} from 'react-bootstrap'
+
 class MissingListItem extends React.Component {
     style = (suit, face) => (this.props.deal.getOwner(suit, face) === undefined) ? 'primary' : 'warning'
     render = () => {
@@ -17,7 +19,7 @@ class MissingListItem extends React.Component {
     }
 };
 
-class MissingDiagram extends React.Component {
+export default class MissingDiagram extends React.Component {
     // faces = Array[13]
     suitDisplay = (faces, suit) => (<MissingListItem key={suit} suit={suit} faces={faces} deal={this.props.deal} handleClick={this.props.handleClick}/>)
     

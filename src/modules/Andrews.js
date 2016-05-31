@@ -11,7 +11,6 @@ export default class Andrews extends Algorithm {
         return 'andrews';
     }
 
-
     id2owner(board, id) {
         // set the biggest seat  default owner
         const owner = new Array(board.deck.size).fill(board.seatCount - 1);

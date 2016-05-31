@@ -17,6 +17,15 @@ module.exports = class Deal {
     /** Array[52]  */
     __owner = undefined
 
+    /**
+       owner2hands
+       hands2owner
+       ????? owner2id
+     **/
+    id2owner = (id) => this.algorithm.id2owner(this.dealer.board, id)
+    hn2hands = (hn) => (hn == undefined) ? new Array(this.dealer.board.seatCount).fill([]) : this.dealer.board.deck.hn2hands(hn)
+    hands2hn = (hands) => this.dealer.board.deck.hands2hn(hands)
+
     get id() {
         return this.__id;
     }
@@ -41,9 +50,11 @@ module.exports = class Deal {
     get owner() {
         if (this.__owner === undefined) {
             if (this.__id !== undefined) {
-                this.__owner = this.algorithm.id2owner(this.dealer.board, this.__id);
-            } else {
+                this.__owner = this.id2owner(this.__id);
+            } else  if (this.__hn) {
                 this.__owner = this.hands2owner(this.hands)
+            } else {
+                this.__owner = new Array(this.dealer.board.deck.size).fill(undefined)
             }
         }
 
@@ -54,15 +65,15 @@ module.exports = class Deal {
         if (this.__hands == undefined) {
             if (this.__hn)
                 this.__hands = this.hn2hands(this.__hn)
-            else
+            else 
                 this.__hands = this.owner2hands(this.owner)
         }
         return this.__hands;
     }
 
     get hn() {
-        if (this.__hn === undefined || this.__hn === '') {
-            this.__hn = this.dealer.board.deck.hands2hn(this.hands);
+        if (this.__hn === undefined) {
+            this.__hn = this.hands2hn(this.hands);
         }
         return this.__hn;
     }
@@ -103,8 +114,6 @@ module.exports = class Deal {
         }
         return owner;
     }
-
-    hn2hands = (hn) => (hn == undefined) ? new Array(this.dealer.board.seatCount).fill([]) : this.dealer.board.deck.hn2hands(hn)
 
     getOwner = (suit, face) => this.owner[this.dealer.board.deck.indexOf(suit, face)]
 

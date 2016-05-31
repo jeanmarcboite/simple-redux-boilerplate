@@ -18,7 +18,18 @@ const initialState = () => {
     };
 };
 
-const getID = (state) => bigInt(state.ID, state.IDbase)
+const getID = (state, IDbase) => {
+    if (state.IDbase == IDbase)
+        return state.ID;
+    if (state.IDbase == 0)
+        return 0;
+
+    if (IDbase == 0)
+        return state.hn;
+
+    return bigInt(state.ID, state.IDbase).toString(IDbase);
+}
+    
 
 const setState = (state, name, value) => {
     let newState = undefined;
@@ -27,18 +38,27 @@ const setState = (state, name, value) => {
     case 'IDbase':
         newState = {
                 ...state,
-            ID: getID(state).toString(value),
+            ID: getID(state, value),
             [name]: value
         }
             break;
         case 'hn':
-            console.log(`set hn: ${value}`)
             newState = {
                 ...state,
                 ID: undefined,
                 [name]: value
             }
             break;
+        case 'ID':
+            newState = {
+                ...state,
+                hn: undefined,
+                [name]: value
+            }
+            if (state.IDbase == 0)
+                newState.IDbase = 16;
+            break;
+
       default:
         newState = {
                 ...state,
