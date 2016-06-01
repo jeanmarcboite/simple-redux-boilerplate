@@ -8,7 +8,9 @@
     "build": "npm run clean && npm run build:webpack",
     "dev": "NODE_ENV=development npm start",
     "start": "node devServer.js",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "mocha": "mocha --compilers js:babel-core/register",
+    "test": "npm run build:webpack && npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,7 @@
     "chance": "^1.0.2",
     "cross-env": "^1.0.6",
     "css-loader": "^0.23.1",
+    "decimal": "0.0.2",
     "decimal.js": "^5.0.8",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^4.0.0",
@@ -41,6 +44,7 @@
     "immutable": "^3.8.1",
     "js-logger": "^1.2.0",
     "lodash": "^4.11.1",
+    "log": "^1.4.0",
     "mathjs": "^3.2.1",
     "node-sass": "^3.4.2",
     "qrand": "^0.1.3",

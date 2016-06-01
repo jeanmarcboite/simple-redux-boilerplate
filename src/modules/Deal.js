@@ -20,13 +20,16 @@ module.exports = class Deal {
     /**
        owner2hands
        hands2owner
-       ????? owner2id
      **/
     id2owner = (id) => this.algorithm.id2owner(this.dealer.board, id)
+    owner2id = (owner) => this.algorithm.owner2id(this.dealer.board, owner)
     hn2hands = (hn) => (hn == undefined) ? new Array(this.dealer.board.seatCount).fill([]) : this.dealer.board.deck.hn2hands(hn)
     hands2hn = (hands) => this.dealer.board.deck.hands2hn(hands)
 
     get id() {
+        if (this.__id == undefined && ((this.__hn) || (this.__hands) || (this.__owner)))  {
+            this.__id = this.owner2id(this.owner)
+        }
         return this.__id;
     }
 

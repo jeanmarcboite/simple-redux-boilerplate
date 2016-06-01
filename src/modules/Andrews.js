@@ -5,7 +5,7 @@ import math from 'mathjs'
 export default class Andrews extends Algorithm {
   constructor() {
     super();
-    // more Derived-specific stuff here, maybe
+      // more Derived-specific stuff here, maybe
   }
     name () {
         return 'andrews';
@@ -56,9 +56,35 @@ export default class Andrews extends Algorithm {
         return owner;
     }
 
-    owner2id(owner) {
-        var id = 0;
+    owner2id(board, _owner) {
+        var id = math.bignumber(0);
+        var owner = _owner;
+        if (!board.checkOwner(_owner))
+            return -1;
+        
+        //this.log.info(`owner2id ${owner}`)
+        for (let seat = 0; seat < board.seatLength.length -1; seat ++) {
+            const hand = []
+            for (const card in owner) {
+                if (owner[card] == seat) {
+                    hand.push(card)
+                }
+            }
+            //this.log.debug(`seat ${seat} hand = ${hand}`)
+            var sum = math.bignumber(0)
+            for (const card in hand) {
+                if (hand[card] > parseInt(card)) {
+                    //this.log.debug(`seat ${seat} hand[${card}] = ${hand[card]}, add ${math.combinations(hand[card], parseInt(card) + 1)}`)
+                    sum = math.add(sum, math.combinations(hand[card], parseInt(card) + 1));
+                }
+            }
 
-        return id;
+            //this.log.debug(`owner2id hand ${seat} (sum ${sum}): ${hand}`)
+            id = math.add(id, math.multiply(sum, board.indexMaxProd[seat + 1]))
+            owner = owner.filter(value => value != seat) 
+            //this.log.debug(`owner2id [${id}] owner: ${owner}`)
+        }
+        //this.log.info(`owner2id id = ${id}`)
+        return math.format(id, {notation: 'fixed'})
     }
 }

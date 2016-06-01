@@ -111,6 +111,15 @@ export class Board {
     
     get seatCount() { return this.seatLength.length;}
     get dealCount() { return this.indexMaxProd[0];}
+
+    checkOwner(owner) {
+        if (owner.length != deck.size)
+            return false;
+        for (const card in owner)
+            if (owner[card] == undefined || owner[card] < 0 || owner[card] >= this.seatCount)
+                return false;
+        return true;
+    }
 }
 
 export default class Dealer {
