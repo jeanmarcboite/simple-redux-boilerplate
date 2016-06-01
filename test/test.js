@@ -6,8 +6,11 @@ describe('Owner', function() {
     it('should', function() {
         const dealer = new Dealer();
         const deal = new Deal(dealer);
-        deal.owner = [8];
-        assert.equal(deal.id, 3)
+        const owners = ([8])
+        for (const owner in owners) {
+            deal.owner = owners[owner];
+            assert.equal(deal.id, -1);
+        }
     })  
 })
 
@@ -19,6 +22,10 @@ describe('Deal', function() {
             deal.id = 3;
             assert.equal(deal.id, 3)
             assert.equal(deal.hn, 'AKQJT98765432... .AKQJT98765432.. ..AKQJT9876532.A ..4.KQJT98765432')
+            assert.deepEqual(deal.owner, [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                           2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
+                                           2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 ])
         })
         it('owner2id', function() {
             const dealer = new Dealer();
@@ -28,8 +35,13 @@ describe('Deal', function() {
                 deal.id = ids[id]
                 const samedeal = new Deal(dealer)
                 samedeal.hn = deal.hn
-                assert.equal(samedeal.id, deal.id)
+                assert.equal(samedeal.id, deal.id, 'setting id')
+                samedeal.owner = deal.owner
+                assert.equal(samedeal.id, deal.id, 'setting owner')
+                samedeal.hands = deal.hands
+                assert.equal(samedeal.id, deal.id, 'setting hands')
             }
         });
+
     })
 })

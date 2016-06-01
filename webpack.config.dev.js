@@ -44,12 +44,21 @@ module.exports = {
     }),
   ],
   module: {
-    loaders: [
+    preLoaders: [
       {
-        test: /\.js?/,
-        exclude: [/node_modules/, /styles/],
+        test: /\.jsx?$/,
+        loaders: ['jshint'],
+        // define an include so we check just the files we need
+          include: path.join(__dirname, 'src')
+      }
+    ]
+  },
+    loaders: [
+        {
+            test: /\.js?/,
+            exclude: [/node_modules/, /styles/],
         loaders: ['babel'],
-        include: path.join(__dirname, 'src')
+          include: path.join(__dirname, 'src')
       },
       {
         test: /\.scss$/,

@@ -7,8 +7,8 @@ const SET_PARAM = PREFIX + '/SET_PARAM';
 exports.prefix = PREFIX;
 
 const initialState = () => {
-  var stored = localStorage.getItem(persist.config.key);
-  if (stored) {
+    var stored = localStorage.getItem(persist.config.key);
+    if (stored) {
         return JSON.parse(localStorage.getItem(persist.config.key))[PREFIX];
     }
     return {
@@ -29,18 +29,18 @@ const getID = (state, IDbase) => {
 
     return bigInt(state.ID, state.IDbase).toString(IDbase);
 }
-    
+
 
 const setState = (state, name, value) => {
     let newState = undefined;
 
     switch (name) {
-    case 'IDbase':
-        newState = {
+        case 'IDbase':
+            newState = {
                 ...state,
-            ID: getID(state, value),
-            [name]: value
-        }
+                ID: getID(state, value),
+                [name]: value
+            }
             break;
         case 'hn':
             newState = {
@@ -59,28 +59,28 @@ const setState = (state, name, value) => {
                 newState.IDbase = 16;
             break;
 
-      default:
-        newState = {
+        default:
+            newState = {
                 ...state,
-            [name]: value
-        }
+                [name]: value
+            }
     }
     return newState;
 }
 
 export default function diagramEditorReducer(state = initialState(), action = {}) {
-  switch (action.type) {
-  case SET_PARAM:
-      return setState(state, action.payload.name, action.payload.value);
+    switch (action.type) {
+        case SET_PARAM:
+            return setState(state, action.payload.name, action.payload.value);
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 }
 
 export function setParam(param, value) {
-  return {
-  type: SET_PARAM,
-  payload: {name: param, value: value}
-};
+    return {
+        type: SET_PARAM,
+        payload: {name: param, value: value}
+    };
 }

@@ -1,13 +1,13 @@
-import Algorithm from './Algorithm'
-import _ from 'lodash'
-import math from 'mathjs'
+import Algorithm from './Algorithm';
+import _ from 'lodash';
+import math from 'mathjs';
 
 export default class Andrews extends Algorithm {
-  constructor() {
-    super();
-      // more Derived-specific stuff here, maybe
-  }
-    name () {
+    constructor() {
+        super();
+        // more Derived-specific stuff here, maybe
+    }
+    name = () => {
         return 'andrews';
     }
 
@@ -39,7 +39,7 @@ export default class Andrews extends Algorithm {
                 if (index == 0) {
                     k = board.seatLength[seat] - card - 1
                 } else {
-                // find the largest K such that Choose(K,seatLength) is less than (or equal to) Nindex.
+                    // find the largest K such that Choose(K,seatLength) is less than (or equal to) Nindex.
                     while (math.combinations(k, board.seatLength[seat] - card) > index) {
                         k -= 1;
                     }

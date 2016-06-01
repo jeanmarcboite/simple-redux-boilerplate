@@ -9,6 +9,9 @@
     },
   
   "rules": {
-    "comma-dangle": 0
+    "comma-dangle": 0,
+    "guard-for-in": 0,
+    "indent": 0,
+    "react/jsx-indent-props": 0
   }
 }

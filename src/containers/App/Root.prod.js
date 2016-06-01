@@ -6,9 +6,13 @@ import App from './App';
  * Component is exported for conditional usage in Root.js
  */
 module.exports = class Root extends Component {
+    propTypes: {
+        store: React.PropTypes.string.isRequired
+    }
   render() {
     const { store } = this.props;
-    return (
+
+      return (
       /**
        * Provider is a component provided to us by the 'react-redux' bindings that
        * wraps our app - thus making the Redux store/state available to our 'connect()'

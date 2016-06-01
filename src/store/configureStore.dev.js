@@ -3,7 +3,7 @@ import rootReducer from '../redux/reducer';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import DevTools from '../containers/DevTools';
-import persistState from 'redux-localstorage'
+import persistState from 'redux-localstorage';
 import persist from '../redux/persist';
 /**
  * Entirely optional, this tiny library adds some functionality to
@@ -11,7 +11,7 @@ import persist from '../redux/persist';
  * conjunction with your standard DevTools monitor gives you great
  * flexibility!
  */
-const logger = createLogger({level: 'log', collapsed: true});
+const logger = createLogger({ level: 'log', collapsed: true });
 
 const finalCreateStore = compose(
   // Middleware you want to use in development:
