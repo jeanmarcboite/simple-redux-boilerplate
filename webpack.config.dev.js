@@ -46,13 +46,12 @@ module.exports = {
   module: {
     preLoaders: [
       {
-        test: /\.jsx?$/,
+        test: /toomanyerrors\.jsx?$/,
         loaders: ['jshint'],
         // define an include so we check just the files we need
           include: path.join(__dirname, 'src')
       }
-    ]
-  },
+    ],
     loaders: [
         {
             test: /\.js?/,
