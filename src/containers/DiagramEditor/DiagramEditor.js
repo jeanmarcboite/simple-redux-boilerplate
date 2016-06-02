@@ -53,16 +53,20 @@ class DiagramEditor extends React.Component {
 
     toggleEdit = () => {
         const editable = !this.state.editable;
-        if (!editable)
-            this.props.actions.setParam('selected', undefined);
-        else 
+        if (editable)
             this.props.actions.setParam('selected', 0);
+        else {
+            this.props.actions.setParam('selected', undefined);
+            if (this.deal.allSeatComplete)
+                this.setState({ ID: this.deal.id });
+        }
 
         this.setState({
             editable: editable,
             showModal: false
         })
-        console.log(this.state)
+
+        console.log(this.state);
     }
 
     handleClick = (deal, suit, face, event) => {
@@ -82,12 +86,34 @@ class DiagramEditor extends React.Component {
             this.handleSelect(this.state.selected);
         }
     }
+
+    handleCardClick = (deal, suit, face, event) => {
+        const cardClicked = this.deal.dealer.board.deck.indexOf(suit, face)
+        let cardSelected = undefined
+        console.log(event)
+        console.log(`cardClick ${deal} ${suit} ${face}`)
+        if (event.ctrlKey) {
+            deal.setOwner(suit, face, undefined)
+            this.props.actions.setParam('hn', deal.hn);
+        } else if (event.shiftKey && this.state.cardSelected) {
+            console.log(`swap ${cardClicked} and ${this.state.cardSelected}`)
+            const ownerSelected = deal.getOwner(this.state.cardSelected)
+            deal.setOwner(this.state.cardSelected, undefined,  deal.getOwner(cardClicked))
+            deal.setOwner(cardClicked, undefined,  ownerSelected)
+            this.props.actions.setParam('hn', deal.hn);
+        } else {
+            console.log(`select card ${cardClicked}`)
+            cardSelected = cardClicked;
+        }
+
+        this.setState({ cardSelected: cardSelected})
+    }
+
     // I know I do not use event, but I need it so I can curry the function!
     // It is not possible to specify a default to 'hand', or the function will be called
     // instead of curried, and there will be a loop, because state is changed during render
     handleSelect = (hand, event) => {
         if (this.state && this.state.editable) { 
-            this.props.actions.setParam('selected', undefined);
             const selected = hand || 0
             const seatComplete = this.deal.seatComplete;
             for (let h = selected; h < seatComplete.length + selected; h++) {
@@ -200,7 +226,7 @@ class DiagramEditor extends React.Component {
                         </FormGroup>
                     </Form>
                 </Navbar>
-                <DealDiagram deal={this.deal} selected={this.state.selected} handleSelect={this.handleSelect}>
+                <DealDiagram deal={this.deal} selected={this.state.selected} handleCardClick={this.handleCardClick} handleSelect={this.handleSelect} editable={this.state.editable}>
                     <MissingDiagram deal={this.deal} handleClick={this.handleClick} editable={this.state.editable}/>
                 </DealDiagram>
                 <Modal show={this.state.showModal} onHide={this.hideModal}>

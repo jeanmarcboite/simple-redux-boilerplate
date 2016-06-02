@@ -42,7 +42,7 @@ export class Deck {
     /** number of suits */
     get suitCount() { return this.suitLength.length;}
     /** get the index from a suit and a face */
-    indexOf = (suit, face) => this.suitIndex[suit] + this.suitCardFace[suit].indexOf(face)
+    indexOf = (suit, face) => (face === undefined) ? suit : this.suitIndex[suit] + this.suitCardFace[suit].indexOf(face)
 
    /** how many suit changes between cards i and j? */
    suitSkip = (i, j) => this.cardSuit[j] - this.cardSuit[i]

@@ -13,6 +13,11 @@ const blackColor = {
 const blueColor = {
       color: 'blue'
 }
+
+const cardStyle = {
+    backgroundColor: 'lightgrey'
+}
+
 const selected = {
     backgroundColor: 'lightgrey'
 }
@@ -30,19 +35,44 @@ const suits = [
 
 const suitSymbol = (suit) => (suit + 1 < suits.length) ? suits[suit + 1] : suits[0]
 
+class EditableListItem extends React.Component {
+    style = (suit, face) => (this.props.deal.getOwner(suit, face) === undefined) ? 'primary' : 'warning'
+    render = () => {
+        return (
+            <ListGroupItem bsStyle={this.props.bsStyle}>
+                <ButtonGroup bsSize="xsmall">
+                    {this.props.faces.split('').map((face, k) => {
+                         return (<Button key={k} style={cardStyle} onClick={_.curry(this.props.handleCardClick)(this.props.deal, this.props.suit, face)}>{face.replace(/T/g, '10')}</Button>)
+                     })}
+                </ButtonGroup>
+            </ListGroupItem>
+        )
+    }
+};
+
 class HandDiagram extends React.Component {
-    suitDisplay = (hand, suit) => (<ListGroupItem key={suit} onClick={this.props.onClick} style={this.props.style} bsStyle={this.props.bsStyle}>{suitSymbol(suit)} {hand.split('').join(' ').replace(/T/g, '10')} </ListGroupItem>)
+    style = () => (this.props.seat == this.props.selected) ? selected : unselected
+    bsStyle = () => (this.props.deal.seatComplete[this.props.seat]) ? 'success' : 'danger'
+
+    suitDisplay = (hand, suit) => (<ListGroupItem {...this.props} key={suit} style={this.style()} bsStyle={this.bsStyle()}>{suitSymbol(suit)} {hand.split('').join(' ').replace(/T/g, '10')} </ListGroupItem>)
+    editableDisplay = (faces, suit) => (<EditableListItem {...this.props} key={suit} suit={suit} faces={faces} deal={this.props.deal} handleClick={this.props.handleClick}  bsStyle={this.bsStyle()}/>)
     
-  render = () => {
-    const hand = this.props.hand.split('.');
-    return (<ListGroup>{hand.map(this.suitDisplay)}</ListGroup>);
+    
+    render = () => {
+        const hand = this.props.deal.hn.split(' ')[this.props.seat].split('.');
+        const onSelect = _.curry(this.props.handleSelect)(this.props.seat)
+        const style = (this.props.seat == this.props.selected) ? selected : unselected
+        const bsStyle = (this.props.deal.seatComplete[this.props.seat]) ? 'success' : 'danger'
+
+      if (this.props.editable)
+          return (<ListGroup onClick={onSelect} style={style} bsStyle={bsStyle}>{hand.map(this.editableDisplay)}</ListGroup>)
+      else
+          return (<ListGroup style={style} bsStyle={bsStyle}>{hand.map(this.suitDisplay)}</ListGroup>);
   }
 };
 
  
 export default class DealDiagram extends React.Component {
-    handSelected = (suit) => (suit == this.props.selected) ? selected : unselected
-    handComplete = (suit) => (this.props.deal.seatComplete[suit]) ? 'success' : 'danger'
 
     render = () => {
         const hands = this.props.deal.hn.split(' ')
@@ -50,19 +80,19 @@ export default class DealDiagram extends React.Component {
       <Grid>
         <Row className="show-grid">
           <Col md={4}></Col>
-          <Col md={4}><HandDiagram hand={hands[0]} onClick={_.curry(this.props.handleSelect)(0)} style={this.handSelected(0)} bsStyle={this.handComplete(0)}/></Col>
+          <Col md={4}><HandDiagram {...this.props} seat={0}/></Col>
           <Col md={4}></Col>
         </Row>
         <Row className="show-grid">
-          <Col md={4}><HandDiagram hand={hands[3]} onClick={_.curry(this.props.handleSelect)(3)} style={this.handSelected(3)} bsStyle={this.handComplete(3)}/></Col>
+            <Col md={4}><HandDiagram {...this.props} seat={3}/></Col>
             <Col md={4}>
-            {this.props.children}
+                {this.props.children}
             </Col>
-          <Col md={4}><HandDiagram hand={hands[1]} onClick={_.curry(this.props.handleSelect)(1)} style={this.handSelected(1)} bsStyle={this.handComplete(1)}/></Col>
+            <Col md={4}><HandDiagram {...this.props} seat={1}/></Col>
         </Row>
         <Row className="show-grid">
-          <Col md={4}></Col>
-          <Col md={4}><HandDiagram hand={hands[2]} onClick={_.curry(this.props.handleSelect)(2)} style={this.handSelected(2)} bsStyle={this.handComplete(2)}/></Col>
+            <Col md={4}></Col>
+            <Col md={4}><HandDiagram {...this.props} seat={2}/></Col>
           <Col md={4}></Col>
         </Row>
       </Grid>
