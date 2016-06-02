@@ -156,6 +156,7 @@ class DiagramEditor extends React.Component {
 
     newDeal = () => {
         this.props.actions.setParam('hn', undefined);
+        this.setState({editable: true})
     }
 
     setDeal = (state) => {
