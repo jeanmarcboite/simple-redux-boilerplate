@@ -128,14 +128,24 @@ module.exports = class Deal {
         return owner;
     }
 
-    getOwner = (suit, face) => this.owner[this.dealer.board.deck.indexOf(suit, face)]
+    indexOf = (card) => (Array.isArray(card)) ? this.dealer.board.deck.indexOf(card[0], card[1]) : card
 
-    setOwner = (suit, face, seat) => {
+    getOwner = (card) => this.owner[this.indexOf(card)]
+
+    setOwner = (card, seat) => {
         if ((seat == undefined) || !this.seatComplete[seat]) {
             // we are going to change the owner, other fields must be invalidated
-            this.owner = this.owner  // implicit call to reset vi set owner
+            this.owner = this.owner  // implicit call to reset via set owner
             // assign to seat
-            this.__owner[this.dealer.board.deck.indexOf(suit, face)] = seat;
+            this.__owner[this.indexOf(card)] = seat;
         }
+    }
+
+    swapOwner = (cardX, cardY) => {
+        this.owner = this.owner
+        const ownerX = this.getOwner(cardX)
+        const ownerY = this.getOwner(cardY)
+        this.__owner[this.indexOf(cardX)] = ownerY;
+        this.__owner[this.indexOf(cardY)] = ownerX;
     }
 }

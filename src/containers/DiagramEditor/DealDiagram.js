@@ -36,7 +36,7 @@ const suits = [
 const suitSymbol = (suit) => (suit + 1 < suits.length) ? suits[suit + 1] : suits[0]
 
 class EditableListItem extends React.Component {
-    style = (suit, face) => (this.props.deal.getOwner(suit, face) === undefined) ? 'primary' : 'warning'
+    style = (suit, face) => (this.props.deal.getOwner([suit, face]) === undefined) ? 'primary' : 'warning'
     render = () => {
         return (
             <ListGroupItem bsStyle={this.props.bsStyle}>

@@ -3,7 +3,7 @@ import React from 'react';
 import {ListGroup, ListGroupItem, Button, ButtonGroup} from 'react-bootstrap'
 
 class MissingListItem extends React.Component {
-    style = (suit, face) => (this.props.deal.getOwner(suit, face) === undefined) ? 'primary' : 'warning'
+    style = (suit, face) => (this.props.deal.getOwner([suit, face]) === undefined) ? 'primary' : 'warning'
     render = () => {
         return (
             <ListGroupItem bsStyle={this.props.bsStyle}>

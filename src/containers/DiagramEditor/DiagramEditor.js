@@ -77,9 +77,9 @@ class DiagramEditor extends React.Component {
             this.openModal();
         } else {
             if (event.ctrlKey) {
-                deal.setOwner(suit, face, undefined)
-            } else if (deal.getOwner(suit, face) == undefined) {
-                deal.setOwner(suit, face, this.state.selected);
+                deal.setOwner([suit, face], undefined)
+            } else if (deal.getOwner([suit, face]) == undefined) {
+                deal.setOwner([suit, face], this.state.selected);
             }
             // set this.props.state.hn, so it will be persisted in the store
             this.props.actions.setParam('hn', deal.hn);
@@ -93,13 +93,11 @@ class DiagramEditor extends React.Component {
         console.log(event)
         console.log(`cardClick ${deal} ${suit} ${face}`)
         if (event.ctrlKey) {
-            deal.setOwner(suit, face, undefined)
+            deal.setOwner([suit, face], undefined)
             this.props.actions.setParam('hn', deal.hn);
         } else if (event.shiftKey && this.state.cardSelected) {
             console.log(`swap ${cardClicked} and ${this.state.cardSelected}`)
-            const ownerSelected = deal.getOwner(this.state.cardSelected)
-            deal.setOwner(this.state.cardSelected, undefined,  deal.getOwner(cardClicked))
-            deal.setOwner(cardClicked, undefined,  ownerSelected)
+            deal.swapOwner(this.state.cardSelected, cardClicked)
             this.props.actions.setParam('hn', deal.hn);
         } else {
             console.log(`select card ${cardClicked}`)
