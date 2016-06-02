@@ -125,6 +125,9 @@ class DiagramEditor extends React.Component {
     }
 
     randomQrng = () => {
+        if (this.state.editable)
+            return;
+
         var xhr = new XMLHttpRequest();
         // xhr.open("GET","https://www.random.org/integers/?num=10&min=0&col=10&base=16&max=65535&format=plain&rnd=new")
         xhr.open('GET', 'http://qrng.anu.edu.au/API/jsonI.php?type=hex16&size=1&length=20')
@@ -186,8 +189,16 @@ class DiagramEditor extends React.Component {
 
         return bigInt(this.state.ID, this.state.IDbase).toString();
     }
+
     
     render = () => {
+        const disabledIfEditable = () => (this.state.editable) ? "className='disabled'" : ""
+        const randomItem = () => {
+            if (this.state.editable)
+                return (<MenuItem eventkey="{1.2}" className="disabled">Random (finish edit to activate)</MenuItem>);
+            else
+                return (<MenuItem eventkey="{1.2}" onSelect={this.randomQrng}>Random from qrng.anu.edu.au</MenuItem>);
+        }
 
         var centerStyle = {
             textAlign: 'center'
@@ -204,7 +215,7 @@ class DiagramEditor extends React.Component {
                     <Form inline>
                         <Nav>
                             <NavDropdown eventKey={1} id="deal-nav-dropdown" title="Deal">
-                                <MenuItem eventkey="{1.2}" onSelect={this.randomQrng}>Random from qrng.anu.edu.au</MenuItem>
+                                {randomItem()}
                                 <MenuItem divider />
                                 <MenuItem eventkey="{1.4}" onSelect={this.newDeal}>New</MenuItem>
                                 <MenuItem eventkey="{1.5}" onSelect={this.toggleEdit}>{(this.state.editable) ? 'Finish edit' : 'Edit'}</MenuItem>
